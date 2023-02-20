@@ -8,14 +8,17 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
+      <link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet"/>
         <title>Main Project</title>
       </Head>
       <MantineProvider
-        theme={{
-          // Override any other properties from default theme
-          fontFamily: "DM Sans, Open Sans, sans serif",
-          spacing: { xs: 15, sm: 20, md: 25, lg: 30, xl: 40 },
-        }}
+        // theme={{
+        //   // Override any other properties from default theme
+        //   fontFamily: "DM Sans, Open Sans, sans serif",
+        //   spacing: { xs: 15, sm: 20, md: 25, lg: 30, xl: 40 },
+        // }}
       >
         <ModalsProvider labels={{ confirm: "Submit", cancel: "Cancel" }}>
           <Component {...pageProps} />

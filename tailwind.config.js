@@ -38,11 +38,18 @@ module.exports = {
         "secondary-blue": "rgba(48, 126, 198, 1)",
         "mimo-blue": "rgba(77, 201, 255, 1)",
         "mimo-grey": "#A4A4A4",
+        "peach": "#DBA39A",
+        "light-pink": "#F0DBDB",
+        "off-white": "#F5EBE0",
+        "beige": "#FEFCF3",
       },
     },
     fontFamily: {
       "dm-sans": ["DM Sans", "sans-serif"],
-      poppins: ["Poppins", "sans-serif"],
+      poppins: ["Poppins"],
+      mono: ["ui-monospace", "Menlo"],
+      fredoka: ["Fredoka One"],
+
     },
 
     fontSize: {
