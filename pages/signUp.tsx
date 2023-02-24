@@ -11,12 +11,12 @@ function signUp()
                     <Image src={signup} alt="sign in image" height={1000} width={900}  />
                 </div>  
                 <div className="flex flex-col pl-28 mt-12" >
-                    <p className="mt-10  font-fredoka text-5xl">Sign Up</p>
+                    <p className="mt-10  font-fredoka text-5xl text-peach">Sign Up</p>
                     <form className="flex flex-col ">
                         <input type={"text"} placeholder="Name" className="border-solid border-2 border-black h-11 pl-4 mt-16 w-96  rounded-lg  "></input>
                         <input type={"email"} placeholder="Email" className="border-solid border-2 border-black h-11 pl-4 mt-7   rounded-lg  "></input>
                         <input type={"password"} placeholder="Password" className="border-solid border-2 border-black h-11 pl-4 mt-7  rounded-lg  "></input>
-                        <input type={"submit"} value="Join" className="border-solid border-2 font-fredoka text-2xl bg-peach text-white h-11 pl-4 mt-16   rounded-lg  "></input>
+                        <input type={"submit"} value="Join" className="border-solid border-2 font-fredoka text-2xl bg-red-500 text-white h-11 pl-4 mt-16   rounded-lg  "></input>
                     </form> 
                     <div className="relative flex py-10 items-center"> 
                     <div className="flex-grow border-t border-gray-400"></div> 
@@ -24,7 +24,7 @@ function signUp()
                     <div className="flex-grow border-t border-gray-400"></div> 
                     </div>
                     <div className="flex justify-center ">
-                        <Link href="#" className="text-lg">Sign In</Link>
+                        <Link href="./" className="text-lg">Sign In</Link>
                     </div>
                 </div>              
                                    
