@@ -27,7 +27,7 @@ function SignIn() {
         <div className="flex-grow border-t border-gray-400"></div> 
       </div>
       <div className="flex justify-center ">
-        <Link href="#" className="">Create New Account</Link>
+        <Link href="./signUp" className="">Create New Account</Link>
       </div>
       
      </div>
