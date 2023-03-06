@@ -49,7 +49,7 @@ module.exports = {
       poppins: ["Poppins"],
       mono: ["ui-monospace", "Menlo"],
       fredoka: ["Fredoka One"],
-
+      gloock: ["Gloock"],
     },
 
     fontSize: {

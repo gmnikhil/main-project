@@ -2,11 +2,10 @@ import Image from "next/image"
 import camera from "./../images/camera.png"
 import edit from "./../images/edit.png"
 import { useDisclosure } from '@mantine/hooks';
-import { Modal,TextInput, Button, Group, Box } from '@mantine/core';
+import { Menu,Modal,TextInput, Button, Group, Box } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { SimpleGrid } from '@mantine/core';
 import { Space } from '@mantine/core';
-
 
 function Profile()
 {
@@ -60,10 +59,7 @@ function Profile()
                         <Space h="xl" />
                         <TextInput label="Interests" placeholder="Interests" />
                         <Space h="xl" />
-                        <TextInput label="CGPA" placeholder="CGPA" />
-
-
-                        
+                        <TextInput label="CGPA" placeholder="CGPA" />                     
                         
                         <Group position="center" mt="xl">
                             <Button
@@ -75,7 +71,31 @@ function Profile()
                      </Box>
                   </Modal>                  
                  </div>
-                 <Button color="success" type="button" size="lg"> Default </Button>
+                 <div className="ml-10 ">
+                    <p className="font-bold text-2xl font-gloock"> Name</p>
+                    <p className="text-lg"> Heading</p>
+                    <p className="text-gray-500 text-sm">Contact Info</p>
+                    <SimpleGrid cols={7} spacing="xl" className="mt-7" >
+                        <div >
+                            <Menu shadow="md" width={200}>
+                                <Menu.Target>
+                                    <Button color="red" className="bg-red-500 text-md rounded-3xl ">Open To</Button>
+                                </Menu.Target>
+                                <Menu.Dropdown>
+                                <Menu.Item><strong>Finding a new Job</strong><br/> Show recruiters and others that you are open to work</Menu.Item>                               
+                                <Menu.Item><strong>Hiring</strong><br/>Share that you are hiring and attract qualified candidates </Menu.Item>
+                                <Menu.Item><strong>Mentoring</strong><br/>Showcase services you offer so that new clients can discover you </Menu.Item>
+                                </Menu.Dropdown>
+                            </Menu>             
+                        </div>
+                        <div >
+                            <Button color="red" variant="outline" className=" text-md rounded-3xl">Add Profile Section</Button>
+                        </div>
+                        <div>
+                            <Button color="gray" variant="outline" className="text-md ml-20 rounded-3xl ">More</Button>
+                        </div>
+                    </SimpleGrid>
+                 </div>
             </div>
            
         </div>

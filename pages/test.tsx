@@ -1,15 +1,22 @@
-import React from "react";
+import { Menu, Button, Text } from '@mantine/core';
 
-// reactstrap components
-import { Button } from "reactstrap";
-
-function Example() {
+function Demo() {
   return (
+    <Menu shadow="md" width={200}>
+      <Menu.Target>
+        <Button color="red" className="bg-red-500 text-md rounded-3xl ">Toggle menu</Button>
+      </Menu.Target>
 
-      <button background-color="#FFF" className="px-4 py-4 rounded" onClick={(e) => { e.preventDefault(); doSomething(); }} > Color </button>
-
+      <Menu.Dropdown>
+        <Menu.Label>Application</Menu.Label>
+        <Menu.Item >Settings</Menu.Item>
+        <Menu.Item >Messages</Menu.Item>
+        <Menu.Item >Gallery</Menu.Item>
+        <Menu.Item >Transfer my data</Menu.Item>
+        <Menu.Item color="red" >Delete my account</Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
   );
 }
 
-export default Example;
-
+export default Demo;
