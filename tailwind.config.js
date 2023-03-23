@@ -50,6 +50,7 @@ module.exports = {
       mono: ["ui-monospace", "Menlo"],
       fredoka: ["Fredoka One"],
       gloock: ["Gloock"],
+      josefin: ["Josefin Sans"],
     },
 
     fontSize: {

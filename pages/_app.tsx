@@ -14,6 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Gloock&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Josefin+Sans:ital,wght@0,100;0,400;1,100&display=swap" rel="stylesheet" />
         <title>Main Project</title>
       </Head>
       <MantineProvider
