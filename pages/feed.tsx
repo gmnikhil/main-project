@@ -1,3 +1,5 @@
+import Post from "../components/post"
+
 import {
   createStyles,
   Navbar,
@@ -132,7 +134,8 @@ export function NavbarSearch() {
 
   
   return (
-    <Navbar height={700} width={{ sm: 300 }} p="md" className={classes.navbar}>
+    <div className="flex flex-row bg-beige h-screen">
+      <Navbar  width={{ sm: 300 }} p="md" className={classes.navbar}>
       <Navbar.Section className="flex justify-center">
         <div className='flex justify-center rounded-full w-40 h-40 bg-off-white mt-10 mb-8' >
         </div>
@@ -159,6 +162,9 @@ export function NavbarSearch() {
         <div className={classes.mainLinks}>{mainLinks}</div>
       </Navbar.Section>
     </Navbar>
+    <Post />
+    </div>
+    
   );
 }
 export default NavbarSearch;
