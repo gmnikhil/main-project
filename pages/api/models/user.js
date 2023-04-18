@@ -11,6 +11,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
+  name: {
+    type: String,
+    required: true,
+  },
 });
 
 export default mongoose.models.User || mongoose.model("User", userSchema);

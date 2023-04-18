@@ -11,16 +11,27 @@ export default async function handler(req, res) {
   switch (method) {
     case "POST":
       try {
-        const { username, password } = req.body;
+        const { username, password, name, email } = req.body;
 
-        if (!username || !password) throw new Error("Invalid Request");
+        if (!username || !password || !name || !email)
+          throw new Error("Invalid Request");
 
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(password, salt);
 
-        const user = await User.create({ username, password: hash });
+        const user = await User.create({
+          username,
+          password: hash,
+          name,
+          email,
+        });
 
-        const token = sign(user._id.toJSON(), process.env.TOKEN_SECRET);
+        const token = sign(
+          { _id: user._id.toJSON(), type: "user" },
+          process.env.TOKEN_SECRET
+        );
+
+        delete user.password;
 
         res.status(201).json({ success: true, user, token });
       } catch (error) {

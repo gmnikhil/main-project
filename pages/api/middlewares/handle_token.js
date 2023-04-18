@@ -9,7 +9,8 @@ export async function verifyUserToken(req) {
 
   const token = header.split(" ")[1];
 
-  const _id = verify(token, process.env.TOKEN_SECRET);
+  const { _id, type } = verify(token, process.env.TOKEN_SECRET);
+  console.log(type);
   const user = await User.findById(_id).lean().exec();
   if (!user) throw new Error("Invalid Token");
   return user;
