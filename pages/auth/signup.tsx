@@ -1,11 +1,14 @@
 import Image from "next/image";
 import signup from "./../../images/signUp.png";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import axios from "axios";
+import { AuthContext } from "../../context/authContext";
+import { useRouter } from "next/router";
+import requestHandler from "../../utils/requestHandler";
 
 function signUp() {
-  const formRef = useRef<any>();
+  const router = useRouter();
 
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
@@ -17,13 +20,18 @@ function signUp() {
   const [emailErr, setEmailErr] = useState("");
   const [passwordErr, setPasswordErr] = useState("");
 
+  const { currentUser } = useContext(AuthContext);
+
+  if (currentUser) {
+    router.push("/profile");
+  }
+
   async function signupUser(e: any) {
     e.preventDefault();
     console.log({ name, username, email, password });
-    axios
-      .post("/api/signup", { name, username, email, password })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    requestHandler("POST", "/api/signup", { name, username, email, password })
+      .then((res: any) => console.log(res.data))
+      .catch((err: any) => console.log(err));
   }
 
   return (

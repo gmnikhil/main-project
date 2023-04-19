@@ -3,8 +3,11 @@ import signin from "./../../images/signin.png";
 import Input from "../../components/input";
 import { Roboto } from "@next/font/google";
 import Link from "next/link";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
+import requestHandler from "../../utils/requestHandler";
+import { AuthContext } from "../../context/authContext";
+import { useRouter } from "next/router";
 
 const roboto = Roboto({
   weight: "700",
@@ -13,19 +16,33 @@ const roboto = Roboto({
 });
 
 function SignIn() {
+  const router = useRouter();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const [usernameErr, setUsernameErr] = useState("");
   const [passwordErr, setPasswordErr] = useState("");
 
+  const { currentUser, handleUser, handleToken, handleUserName } =
+    useContext(AuthContext);
+
+  if (currentUser) {
+    router.push("/profile");
+  }
+
   async function loginUser(e: any) {
     e.preventDefault();
     console.log({ username, password });
-    axios
-      .post("/api/login", { username, password })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    requestHandler("POST", "/api/login", { username, password })
+      .then((res: any) => {
+        const { user, token } = res.data;
+        handleUser(user);
+        handleToken(token);
+        handleUserName(user.username);
+        if (res.data.success) router.push("/profile");
+      })
+      .catch((err: any) => console.log(err));
   }
 
   return (

@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import { MantineProvider } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
 import Head from "next/head";
+import AuthContextProvider from "../context/authContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -18,7 +19,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       // }}
       >
         <ModalsProvider labels={{ confirm: "Submit", cancel: "Cancel" }}>
-          <Component {...pageProps} />
+          <AuthContextProvider>
+            <Component {...pageProps} />
+          </AuthContextProvider>
         </ModalsProvider>
       </MantineProvider>
     </>

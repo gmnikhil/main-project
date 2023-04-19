@@ -28,7 +28,10 @@ export default async function handler(req, res) {
 
         if (!correct) throw new Error("Incorrect password");
 
-        const token = sign(user._id.toJSON(), process.env.TOKEN_SECRET);
+        const token = sign(
+          { _id: user._id.toJSON(), type: "user" },
+          process.env.TOKEN_SECRET
+        );
 
         res.status(200).json({ success: true, user, token });
       } catch (error) {
