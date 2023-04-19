@@ -29,26 +29,31 @@ function Profile() {
   const [opened3, handlers3] = useDisclosure(false);
   const theme = useMantineTheme();
 
-  const { currentUser, token, handleLogout } = useContext(AuthContext);
+  const { currentUser, token, handleUserLogout } = useContext(AuthContext);
 
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
 
+  const logout = () => {
+    handleUserLogout();
+    router.push("/auth/login");
+  };
+
   useEffect(() => {
-    requestHandler("GET", "/api/profile", {}, token)
+    if (!token) return;
+    requestHandler("GET", "/api/user/profile", {}, token)
       .then((res: any) => {
         setName(res.data.user.name);
         setEmail(res.data.user.email);
         setUsername(res.data.user.username);
       })
       .catch((err: any) => console.log(err));
-  }, []);
+  }, [token]);
 
-  const logout = () => {
-    handleLogout();
-    router.push("/auth/login");
-  };
+  useEffect(() => {
+    if (!currentUser) router.push("/auth/login");
+  }, [currentUser]);
 
   return (
     <div className="flex bg-beige w-full justify-center flex-col ">

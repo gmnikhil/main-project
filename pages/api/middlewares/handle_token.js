@@ -1,7 +1,8 @@
 import User from "../models/user";
+import Company from "../models/company";
 import { verify } from "jsonwebtoken";
 
-export async function verifyUserToken(req) {
+export async function verifyToken(req) {
   const header = req.headers.authorization;
   if (!header) throw new Error("No Header. Access denied");
   if (!header.startsWith("Bearer "))
@@ -10,8 +11,14 @@ export async function verifyUserToken(req) {
   const token = header.split(" ")[1];
 
   const { _id, type } = verify(token, process.env.TOKEN_SECRET);
-
-  const user = await User.findById(_id).lean().exec();
-  if (!user) throw new Error("Invalid Token");
-  return user;
+  if (type == "user") {
+    const user = await User.findById(_id).lean().exec();
+    if (!user) throw new Error("Invalid Token");
+    return user;
+  } else if (type == "company") {
+    const company = await Company.findById(_id).lean().exec();
+    if (!company) throw new Error("Invalid Token");
+    return company;
+  }
+  throw new Error("Token Error");
 }

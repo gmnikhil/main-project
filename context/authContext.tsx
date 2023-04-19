@@ -4,12 +4,21 @@ export const AuthContext = createContext(undefined as any);
 
 function AuthContextProvider(props: any) {
   const [currentUser, setCurrentUser] = useState();
+  const [currentCompany, setCurrentCompany] = useState();
+  const [companyName, setCompanyName] = useState();
   const [username, setUsername] = useState();
   const [token, setToken] = useState();
 
   const handleUser = (user: any) => {
     setCurrentUser(user);
+    if (user) handleCompanyLogout();
     localStorage.setItem("projectUser", user);
+  };
+
+  const handleCompany = (company: any) => {
+    setCurrentCompany(company);
+    if (company) handleUserLogout();
+    localStorage.setItem("projectCompany", company);
   };
 
   const handleToken = (token: any) => {
@@ -22,27 +31,45 @@ function AuthContextProvider(props: any) {
     localStorage.setItem("projectUsername", username);
   };
 
-  const handleLogout = () => {
+  const handleCompanyName = (companyName: any) => {
+    setCompanyName(companyName);
+    localStorage.setItem("projectCompanyName", companyName);
+  };
+
+  const handleUserLogout = () => {
     localStorage.removeItem("projectUser");
     localStorage.removeItem("projectToken");
     localStorage.removeItem("projectUsername");
     setCurrentUser(undefined);
   };
+  const handleCompanyLogout = () => {
+    localStorage.removeItem("projectCompany");
+    localStorage.removeItem("projectToken");
+    localStorage.removeItem("projectCompanyName");
+    setCurrentCompany(undefined);
+  };
 
   const value = {
     currentUser,
+    currentCompany,
     token,
     username,
+    companyName,
     handleUser,
-    handleLogout,
+    handleCompany,
+    handleUserLogout,
     handleToken,
     handleUsername,
+    handleCompanyName,
+    handleCompanyLogout,
   };
 
   useEffect(() => {
     setCurrentUser(localStorage.getItem("projectUser") as any);
     setUsername(localStorage.getItem("projectUsername") as any);
     setToken(localStorage.getItem("projectToken") as any);
+    setCurrentCompany(localStorage.getItem("projectCompany") as any);
+    setCompanyName(localStorage.getItem("projectCompanyName") as any);
   }, []);
 
   return (

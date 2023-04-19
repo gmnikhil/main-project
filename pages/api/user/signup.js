@@ -1,5 +1,5 @@
-import dbConnect from "./lib/db";
-import User from "./models/user";
+import dbConnect from "../lib/db";
+import User from "../models/user";
 import bcrypt from "bcrypt";
 import { sign } from "jsonwebtoken";
 

@@ -1,5 +1,6 @@
-import dbConnect from "./lib/db";
-import User from "./models/user";
+import dbConnect from "../lib/db";
+import company from "../models/company";
+import Company from "../models/company";
 import bcrypt from "bcrypt";
 import { sign } from "jsonwebtoken";
 
@@ -11,29 +12,27 @@ export default async function handler(req, res) {
   switch (method) {
     case "POST":
       try {
-        console.log(req.body);
+        const { email, password } = req.body;
 
-        const { username, password } = req.body;
+        if (!email || !password) throw new Error("Invalid Request");
 
-        if (!username || !password) throw new Error("Invalid Request");
-
-        const user = await User.findOne({ username })
+        const company = await Company.findOne({ email })
           .select("+password")
           .lean()
           .exec();
-        if (!user) throw new Error("Invalid Username");
+        if (!company) throw new Error("Invalid Email");
 
-        const correct = await bcrypt.compare(password, user.password);
-        delete user.password;
+        const correct = await bcrypt.compare(password, company.password);
+        delete company.password;
 
         if (!correct) throw new Error("Incorrect password");
 
         const token = sign(
-          { _id: user._id.toJSON(), type: "user" },
+          { _id: company._id.toJSON(), type: "company" },
           process.env.TOKEN_SECRET
         );
 
-        res.status(200).json({ success: true, user, token });
+        res.status(200).json({ success: true, company, token });
       } catch (error) {
         console.log(error);
         res.status(400).json({ success: false });

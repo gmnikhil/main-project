@@ -3,8 +3,11 @@ import signin from "./../../images/signin.png";
 import Input from "../../components/input";
 import { Roboto } from "@next/font/google";
 import Link from "next/link";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import requestHandler from "../../utils/requestHandler";
+import { AuthContext } from "../../context/authContext";
+import { useRouter } from "next/router";
 
 const roboto = Roboto({
   weight: "700",
@@ -13,20 +16,34 @@ const roboto = Roboto({
 });
 
 function SignIn() {
-  const [username, setUsername] = useState("");
+  const router = useRouter();
+
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [usernameErr, setUsernameErr] = useState("");
+  const [emailErr, setEmailErr] = useState("");
   const [passwordErr, setPasswordErr] = useState("");
+
+  const { currentCompany, handleCompany, handleToken, handleCompanyName } =
+    useContext(AuthContext);
 
   async function loginUser(e: any) {
     e.preventDefault();
-    console.log({ username, password });
-    axios
-      .post("/api/login", { username, password })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    console.log({ email, password });
+    requestHandler("POST", "/api/company/login", { email, password })
+      .then((res: any) => {
+        const { company, token } = res.data;
+        handleCompany(company);
+        handleToken(token);
+        handleCompanyName(company.name);
+        if (res.data.success) router.push("/company/profile");
+      })
+      .catch((err: any) => console.log(err));
   }
+
+  useEffect(() => {
+    if (currentCompany) router.push("/company/profile");
+  }, [currentCompany]);
 
   return (
     <div className="flex flex-row justify-evenly mt-0 ">
@@ -34,10 +51,10 @@ function SignIn() {
         <p className="font-fredoka text-6xl  text-peach">Welcome</p>
         <form method="post" className="flex flex-col">
           <Input
-            type="text"
-            onChange={(e: any) => setUsername(e.target.value)}
-            value={username}
-            placeholder="Username"
+            type="email"
+            onChange={(e: any) => setEmail(e.target.value)}
+            value={email}
+            placeholder="Email"
           />
           <Input
             type="password"
