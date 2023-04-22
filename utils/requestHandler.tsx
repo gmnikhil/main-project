@@ -8,7 +8,8 @@ export default function requestHandler(
 ) {
   const URL = endpoint;
   //process.env.NEXT_PUBLIC_BASE_URL + endpoint;
-  const headers = token ? { Authorization: `Bearer ${token}` } : ("" as any);
+  let headers = {};
+  if (token) headers = { Authorization: `Bearer ${token}` };
 
   if (method === "GET") {
     return axios.get(URL, { headers });

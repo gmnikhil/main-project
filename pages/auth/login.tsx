@@ -35,7 +35,6 @@ function SignIn() {
         handleUser(user);
         handleToken(token);
         handleUsername(user.username);
-        if (res.data.success) router.push("/profile");
       })
       .catch((err: any) => console.log(err));
   }
