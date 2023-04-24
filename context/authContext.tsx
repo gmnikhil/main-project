@@ -66,7 +66,7 @@ function AuthContextProvider(props: any) {
 
   useEffect(() => {
     let u = localStorage.getItem("projectUser");
-    if (u) setCurrentUser(u as any);
+    if (u) setCurrentUser(JSON.parse(u) as any);
     setUsername(localStorage.getItem("projectUsername") as any);
     setToken(localStorage.getItem("projectToken") as any);
     let c = localStorage.getItem("projectCompany");

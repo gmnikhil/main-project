@@ -1,13 +1,12 @@
 import { Server } from "socket.io";
 import dbConnect from "../lib/db";
 import Message from "../models/message";
-import User from "../models/user";
 import { verifyToken } from "../middlewares/handle_token";
 
 export default async function handler(req, res) {
   await dbConnect();
+
   if (res.socket.server.io) {
-    console.log("Already set up");
     res.end();
     return;
   }
@@ -16,51 +15,33 @@ export default async function handler(req, res) {
   res.socket.server.io = io;
 
   io.on("connection", async (socket) => {
-    const user = await verifyToken(req);
-    const { _id } = user;
+    await verifyToken(req);
 
-    socket.join(_id);
+    const room = socket.handshake.query.room;
+    socket.join(room);
 
-    const activeUsers = Object.keys(io.sockets.adapter.rooms).filter(
-      (id) => id !== _id
-    );
+    console.log(`Socket connected: ${socket.id} to ${room}`);
 
-    io.emit("activeUsers", activeUsers);
+    //console.log(io.of("/").adapter.rooms);
 
     socket.on("message", async (newMessage) => {
       const { content, sender, recipient } = newMessage;
-      console.log(newMessage);
+
       const message = new Message({
         body: content,
         from: sender,
         to: recipient,
       });
+
       await message.save();
 
-      io.to(recipient).emit("message", message);
-    });
-
-    socket.on("addUser", (userId) => {
-      socket.join(userId);
+      io.to(room).emit("message", message);
     });
 
     socket.on("disconnect", () => {
-      const activeUsers = Object.keys(io.sockets.adapter.rooms).filter(
-        (id) => id !== _id
-      );
-
-      io.emit("activeUsers", activeUsers);
+      console.log(`User disconnected from room ${room}`);
     });
   });
 
-  // async function onAuthorizeSuccess(data, accept) {
-  //   accept();
-  // }
-
-  // function onAuthorizeFail(data, message, error, accept) {
-  //   if (error) throw new Error(message);
-  //   accept(new Error(message));
-  // }
   res.end();
-  //return io;
 }
