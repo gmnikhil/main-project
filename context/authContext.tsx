@@ -12,7 +12,7 @@ function AuthContextProvider(props: any) {
   const handleUser = (user: any) => {
     setCurrentUser(user);
     if (user) handleCompanyLogout();
-    localStorage.setItem("projectUser", user);
+    localStorage.setItem("projectUser", JSON.stringify(user));
   };
 
   const handleCompany = (company: any) => {
@@ -65,10 +65,12 @@ function AuthContextProvider(props: any) {
   };
 
   useEffect(() => {
-    setCurrentUser(localStorage.getItem("projectUser") as any);
+    let u = localStorage.getItem("projectUser");
+    if (u) setCurrentUser(u as any);
     setUsername(localStorage.getItem("projectUsername") as any);
     setToken(localStorage.getItem("projectToken") as any);
-    setCurrentCompany(localStorage.getItem("projectCompany") as any);
+    let c = localStorage.getItem("projectCompany");
+    if (c) setCurrentCompany(JSON.parse(c) as any);
     setCompanyName(localStorage.getItem("projectCompanyName") as any);
   }, []);
 

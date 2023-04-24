@@ -133,6 +133,9 @@ function Profile() {
               <Menu shadow="md" width={200}>
                 <Menu.Target>
                   <Button
+                    onClick={() => {
+                      router.push("/chat/list");
+                    }}
                     color="red"
                     className="bg-red-500 text-md rounded-3xl "
                   >
