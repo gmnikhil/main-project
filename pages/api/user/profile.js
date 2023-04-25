@@ -10,7 +10,8 @@ export default async function handler(req, res) {
   switch (method) {
     case "GET":
       try {
-        const user = await verifyToken(req);
+        const { user } = await verifyToken(req);
+        if (!user) throw new Error("User Token verification Error");
         res.status(200).json({ success: true, user });
       } catch (error) {
         console.log(error);
@@ -20,11 +21,13 @@ export default async function handler(req, res) {
     case "PATCH":
       try {
         console.log(req.body);
-        const { _id } = await verifyToken(req);
-        const user = await User.findOneAndUpdate(_id, req.body, {
+        const { user } = await verifyToken(req);
+        if (!user) throw new Error("User Token verification Error");
+        const { _id } = user;
+        const updated_user = await User.findOneAndUpdate(_id, req.body, {
           new: true,
         });
-        res.status(201).json({ success: true, user });
+        res.status(201).json({ success: true, user: updated_user });
       } catch (error) {
         console.log(error);
         res.status(400).json({ success: false });

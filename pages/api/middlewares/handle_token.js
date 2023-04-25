@@ -14,11 +14,11 @@ export async function verifyToken(req) {
   if (type == "user") {
     const user = await User.findById(_id).lean().exec();
     if (!user) throw new Error("Invalid Token");
-    return user;
+    return { user, type };
   } else if (type == "company") {
     const company = await Company.findById(_id).lean().exec();
     if (!company) throw new Error("Invalid Token");
-    return company;
+    return { company, type };
   }
   throw new Error("Token Error");
 }

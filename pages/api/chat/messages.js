@@ -5,9 +5,14 @@ export default async function handler(req, res) {
   switch (method) {
     case "GET":
       try {
-        const { _id: userId } = await verifyToken(req);
+        const x = await verifyToken(req);
+
+        let _id;
+        if (x.type == "user") _id = x.user._id;
+        else _id = x.company._id;
+
         const messages = await Message.find({
-          $or: [{ sender: userId }, { recipient: userId }],
+          $or: [{ sender: _id }, { recipient: _id }],
         }).sort({ createdAt: "asc" });
 
         res.json(messages);
