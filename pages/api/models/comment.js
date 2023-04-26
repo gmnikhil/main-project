@@ -2,9 +2,14 @@ import mongoose from "mongoose";
 
 const commentSchema = new mongoose.Schema(
   {
+    commentorType: {
+      type: String,
+      enum: ["user", "company"],
+      required: true,
+    },
     commentor: {
       type: mongoose.Schema.Types.ObjectId,
-      //ref: ["User", "Company"],
+      refPath: "commentorType",
       required: true,
     },
     post_id: {

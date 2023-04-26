@@ -18,6 +18,7 @@ export default async function handler(req, res) {
           if (req.body.creator != x.user._id)
             throw new Error("Unauthorized Posting");
         }
+        req.body.creatorType = x.type;
         const post = await Post.create(req.body);
         res.status(201).json({ success: true, post });
       } catch (error) {

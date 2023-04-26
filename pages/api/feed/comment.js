@@ -12,7 +12,16 @@ export default async function handler(req, res) {
       try {
         await verifyToken(req);
         const comments = await Comment.find(req.query)
-          .populate("commentor")
+          .populate({
+            path: "commentor",
+            model: function (doc) {
+              if (doc.commentorType === "user") {
+                return "User";
+              } else {
+                return "Company";
+              }
+            },
+          })
           .lean()
           .exec();
         console.log(comments);
@@ -31,6 +40,7 @@ export default async function handler(req, res) {
           if (req.body.commentor != x.user._id)
             throw new Error("Unauthorized Comment");
         }
+        req.body.commentorType = x.type;
         const comment = await Comment.create(req.body);
         res.status(201).json({ success: true, comment });
       } catch (error) {

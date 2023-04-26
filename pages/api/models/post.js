@@ -2,9 +2,14 @@ import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema(
   {
+    creatorType: {
+      type: String,
+      enum: ["user", "company"],
+      required: true,
+    },
     creator: {
       type: mongoose.Schema.Types.ObjectId,
-      //ref: ["User", "Company"],
+      refPath: "creatorType",
       required: true,
     },
     content: {

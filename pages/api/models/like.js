@@ -2,9 +2,14 @@ import mongoose from "mongoose";
 
 const likeSchema = new mongoose.Schema(
   {
+    likerType: {
+      type: String,
+      enum: ["user", "company"],
+      required: true,
+    },
     liker: {
       type: mongoose.Schema.Types.ObjectId,
-      //ref: ["User", "Company"],
+      refPath: "likerType",
       required: true,
     },
     post_id: {
