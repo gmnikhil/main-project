@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "node": "npx hardhat node --tsconfig hardhat/tsconfig.json",
+    "compile": "npx hardhat compile --tsconfig hardhat/tsconfig.json",
+    "deploy": "npx hardhat run scripts/deploy.ts --tsconfig hardhat/tsconfig.json"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
@@ -42,7 +45,10 @@
     "tabler-icons-react": "^1.55.0",
     "yup": "^0.32.11",
     "@nomiclabs/hardhat-ganache": "^2.0.1",
-    "dotenv": "^16.0.1"
+    "dotenv": "^16.0.1",
+    "nft.storage": "^6.4.0",
+    "react-toastify": "^9.0.7",
+    "web3": "^1.7.4"
   },
   "devDependencies": {
     "@types/node": "18.13.0",

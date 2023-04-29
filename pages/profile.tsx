@@ -1,6 +1,6 @@
 import Image from "next/image";
-import camera from "./../images/camera.png";
-import edit from "./../images/edit.png";
+import camera from "./../public/images/camera.png";
+import edit from "./../public/images/edit.png";
 import { useDisclosure } from "@mantine/hooks";
 import { Menu, Modal, TextInput, Button, Group, Box } from "@mantine/core";
 import { SimpleGrid } from "@mantine/core";
@@ -59,7 +59,7 @@ function Profile() {
     <div className="flex bg-beige w-full justify-center flex-col ">
       <button onClick={logout}>Logout</button>
       <div className=" bg-white mt-10 rounded-lg mx-72 pb-6 -mb-5">
-        <div className="w-full bg-[url('./../images/profile.png')] bg-cover h-1/2 pt-48 pb-5">
+        <div className="w-full bg-[url('./../public/images/profile.png')] bg-cover h-1/2 pt-48 pb-5">
           <div className="flex justify-center items-center rounded-full w-60 h-60 bg-beige ml-10 ">
             <Image src={camera} alt="camera image" className="w-20 h-20" />
           </div>

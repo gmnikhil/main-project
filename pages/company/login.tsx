@@ -1,5 +1,5 @@
 import Image from "next/image";
-import signin from "./../../images/signin.png";
+import signin from "./../../public/images/signin.png";
 import Input from "../../components/input";
 import { Roboto } from "@next/font/google";
 import Link from "next/link";

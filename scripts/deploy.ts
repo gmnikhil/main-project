@@ -7,7 +7,7 @@ function copyABI() {
     __dirname,
     "../artifacts/contracts/MainProject.sol/MainProject.json"
   );
-  const dest = path.join(__dirname, "../../frontend");
+  const dest = path.join(__dirname, "../");
   child_process.execSync(`copy ${src} ${dest}`);
 }
 

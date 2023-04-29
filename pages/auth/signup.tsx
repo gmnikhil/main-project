@@ -1,5 +1,5 @@
 import Image from "next/image";
-import signup from "./../../images/signUp.png";
+import signup from "./../../public/images/signUp.png";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/authContext";
