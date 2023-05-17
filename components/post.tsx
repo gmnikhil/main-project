@@ -11,14 +11,19 @@ import {
 import Image from "next/image";
 import signin from "../public/images/signin.jpg";
 
-function Post() {
+function Post({ post }: { post: any }) {
   return (
-    <div className="bg-white w-2/5 ml-72 mt-3 rounded-xl border-solid border-gray-300 border pb- mb-10 flex flex-col h-full">
+    <div
+      className="bg-white ml-72 mt-3 rounded-xl border-solid border-gray-300 border pb- mb-10 flex flex-col h-fit"
+      style={{ width: "600px" }}
+    >
       <div className="flex flex-row">
-        <div className="flex justify-center rounded-full w-14 h-14 bg-off-white mt-5 ml-5"></div>
+        <div className="flex justify-center rounded-full !w-14 !h-14 bg-off-white mt-5 ml-5"></div>
         <div className="mt-7 ml-3 font-josefin text-sm font-bold">
-          <p>Name</p>
-          <p className="text-xs text-gray-400 font-normal">Description</p>
+          <p>{post.creator.name}</p>
+          <p className="text-xs text-gray-400 font-normal">
+            {post.creator.username}
+          </p>
         </div>
         <Button
           color="dark"
@@ -30,11 +35,7 @@ function Post() {
         </Button>
       </div>
       <div className="text-sm ml-5 mt-7">
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-          posuere sapien quis ante ultrices tempus. Ut et ante mauris. Proin
-          tincidunt finibus metus. Aliquam erat volutpat.
-        </p>
+        <p>{post.content}</p>
       </div>
       <div
         style={{
@@ -46,9 +47,11 @@ function Post() {
         }}
       >
         <Image
-          src={signin}
+          src={post.image || signin}
           alt="camera image"
-          style={{ height: "100%", width: "100%", objectFit: "cover" }}
+          width={1000}
+          height={500}
+          //style={{ height: "100%", width: "100%", objectFit: "cover" }}
         />
       </div>
       <div className="flex flex-row ">

@@ -7,7 +7,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../../context/authContext";
 import requestHandler from "../../../utils/requestHandler";
 
-export default function AddFileModal({
+export default function AddPostModal({
   open,
   handleClose,
   handleUpdate,
@@ -18,27 +18,9 @@ export default function AddFileModal({
 }) {
   const [file, setFile] = useState();
 
-  const [post_title, setPostTitle] = useState("");
-  const [post_description, setPostDescription] = useState("");
-  const [post_label, setPostLabel] = useState("");
+  const [post_content, setPostContent] = useState("");
 
-  const { acc, MainProjectContract, loading } = useWalletDetails();
-
-  const { token } = useContext(AuthContext);
-
-  const [select_data, setSelectData] = useState([
-    { value: "Happy", label: "Happy" },
-    { value: "Nature", label: "Nature" },
-    { value: "Love", label: "Love" },
-  ]);
-
-  const privacy_types = [
-    { value: "Public", label: "Public" },
-    { value: "Private", label: "Private" },
-    { value: "Restricted", label: "Restricted" },
-  ];
-
-  const [post_visibility, setPostVisibility] = useState(privacy_types[0].value);
+  const { token, currentUser, currentCompany } = useContext(AuthContext);
 
   const handleFile = (file: any) => {
     setFile(file);
@@ -46,17 +28,35 @@ export default function AddFileModal({
 
   const handleUpload = async () => {
     try {
-      const res = await storeFile(file, post_title, post_description);
+      let url;
+      if (file) {
+        const res = await storeFile(file, "post", "post");
 
-      if (!res.data) throw Error(`Could'nt store file`);
+        if (!res.data) throw Error(`Could'nt store file`);
 
-      const url =
-        `https://ipfs.io/` +
-        res.data.data.image.href.replace(":", "").replace("//", "/");
-
+        url =
+          `https://ipfs.io/` +
+          res.data.data.image.href.replace(":", "").replace("//", "/");
+      }
       const date = new Date().toISOString();
-
-      const response = await requestHandler("POST", "/api/post", {}, token);
+      console.log(token);
+      let creatorType, creator;
+      if (currentUser) {
+        (creatorType = "user"), (creator = currentUser._id);
+      } else {
+        (creatorType = "company"), (creator = currentCompany._id);
+      }
+      const response = await requestHandler(
+        "POST",
+        "/api/feed/post",
+        {
+          creatorType,
+          creator,
+          content: post_content,
+          image: url,
+        },
+        token
+      );
       if (!response.data.success) throw Error(`Could'nt upload`);
 
       //      const r = await FileFly.methods
@@ -100,55 +100,21 @@ export default function AddFileModal({
             <DragAndDrop handleFile={handleFile} />
           )}
         </div>
-        <label className="mt-14 text-sm">Title</label>
-        <Input
-          className="mb-4"
-          onChange={(e) => {
-            setPostTitle(e.target.value);
-          }}
-          placeholder="Enter a title for your file"
-          size="md"
-        />
-        <label className="text-sm">Description</label>
+
+        <label className="text-sm">Content</label>
         <Textarea
-          onChange={(e) => setPostDescription(e.target.value)}
+          onChange={(e) => setPostContent(e.target.value)}
           className="mb-3"
-          placeholder="Enter a description for your file"
+          placeholder="Write your post..."
           size="md"
         />
-        <label className="text-sm">Label</label>
-        <Select
-          data={select_data}
-          className="mb-2"
-          placeholder="Add a label"
-          nothingFound="Nothing found"
-          searchable
-          creatable
-          value={post_label}
-          getCreateLabel={(query) => `+ Create ${query}`}
-          onCreate={(query) => {
-            const item = { value: query, label: query };
-            setSelectData((current) => [...current, item]);
-            setPostLabel(item.value);
-            return item;
-          }}
-          onChange={(val) => setPostLabel(val!)}
-        />
-        <label className="text-sm">Visibility</label>
-        <Select
-          data={privacy_types}
-          placeholder="Choose post Visibility"
-          searchable
-          value={post_visibility}
-          onChange={(val) => setPostVisibility(val!)}
-        />
+
         <div className="mt-4 flex justify-end ">
           <Button
             className="text-white bg-baseColor"
-            disabled={!post_description || !post_title || !post_label || !file}
+            disabled={!post_content}
             onClick={() => {
               handleUpload();
-              //setFileUploadModalOpened(false);
             }}
           >
             Post

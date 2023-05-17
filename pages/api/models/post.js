@@ -9,8 +9,8 @@ const postSchema = new mongoose.Schema(
     },
     creator: {
       type: mongoose.Schema.Types.ObjectId,
-      refPath: "creatorType",
       required: true,
+      ref: "Creator",
     },
     content: {
       type: String,
