@@ -2,6 +2,9 @@ import { useRouter } from "next/router";
 import { useState, useEffect, useContext } from "react";
 import { io } from "socket.io-client";
 import { AuthContext } from "../../context/authContext";
+import { TextInput } from '@mantine/core';
+import { Send } from 'tabler-icons-react';
+import InputEmoji from "react-input-emoji";
 
 /*Currently only users can chat between each other */
 
@@ -79,8 +82,21 @@ const MessagesPage = () => {
     };
   }, [currentUser, recipient]);
 
+  const [text, setText] = useState("");
+
+  function handleOnEnter (text) {
+    console.log('enter', text)
+  }
+
   return (
-    <div>
+    <div className="bg-beige h-screen flex justify-center pt-10">
+      <div className="bg-white w-5/6 mb-10">
+        <div className="bg-off-white h-16 flex items-center ">
+          <div className="bg-black rounded-3xl w-10 h-10 ml-5">
+           
+          </div>
+          <p className="ml-3 font-josefin">Name</p>
+        </div>
       <h1>Messages</h1>
       <div>
         <ul>
@@ -91,13 +107,32 @@ const MessagesPage = () => {
           ))}
         </ul>
       </div>
-      <div>
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <button onClick={handleSendMessage}>Send</button>
+        <div className="absolute bottom-10 w-5/6 h-14 flex flex-row items-center bg-off-white overflow-hidden">
+          {/* <div className="w-full ml-3">
+            <TextInput
+            size="sm"
+            rightSectionWidth={20}
+            styles={{ rightSection: { pointerEvents: 'none' } }}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            
+            />
+          </div> */}
+              <InputEmoji
+              value={text}
+              onChange={setText}
+              cleanOnEnter
+              placeholder="Type a message"
+              onEnter={handleOnEnter}
+            />
+            {/* <Send
+              size={48}
+              strokeWidth={2}
+              color={'black'}
+              onClick={handleSendMessage}
+            />  */}
+          
+        </div>
       </div>
     </div>
   );
