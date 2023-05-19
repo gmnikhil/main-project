@@ -3,7 +3,7 @@ import { verifyToken } from "../middlewares/handle_token";
 import User from "../models/user";
 import Company from "../models/company";
 import Post from "../models/post";
-import mongoose from "mongoose";
+import Like from "../models/like";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -21,21 +21,33 @@ export default async function handler(req, res) {
         } else {
           creator = x.user._id;
         }
-        const posts = await Post.find({}).lean().exec();
+        const posts = await Post.find({}).exec();
         const populatedPosts = await Promise.all(
           posts.map(async (post) => {
             if (post.creatorType === "user") {
-              const user = await User.findById(post.creator).lean();
-              return { ...post, creator: user };
-            } else if (post.creatorType === "company") {
-              const company = await Company.findById(post.creator).lean();
-              return { ...post, creator: company };
+              const user = await User.findById(post.creator).lean().exec();
+              const liked = await Like.findOne({
+                liker: creator,
+                post_id: post._id,
+              })
+                .lean()
+                .exec();
+              return { ...post._doc, creator: user, liked: !!liked };
             } else {
-              return post;
+              const company = await Company.findById(post.creator)
+                .lean()
+                .exec();
+              const liked = await Like.findOne({
+                liker: creator,
+                post_id: post._id,
+              })
+                .lean()
+                .exec();
+              return { ...post._doc, creator: company, liked: !!liked };
             }
           })
         );
-        console.log(populatedPosts);
+        //console.log(populatedPosts);
         res.status(201).json({ success: true, posts: populatedPosts });
       } catch (error) {
         console.log(error);
