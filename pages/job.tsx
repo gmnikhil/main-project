@@ -1,14 +1,19 @@
 
 import Jobpost from "../components/Jobpost";
+import Navbar from "../components/Navbar";
 
 function Job() {
     return(
+       <>
+       <Navbar />
         <div className="flex bg-off-white h-screen p-5 justify-center ">
-                <div className= " bg-white rounded-xl border-solid border-gray-300 border w-1/3 pt-10">
-                    <Jobpost />
-                    <Jobpost />
-                </div>
+            <div className= " bg-white rounded-xl border-solid border-gray-300 border w-1/3 pt-10">
+                <Jobpost />
+                <Jobpost />
+            </div>
         </div>
+       </> 
+        
     );
 }
 
