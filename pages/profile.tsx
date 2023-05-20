@@ -21,6 +21,7 @@ import { useContext, useEffect, useState } from "react";
 import requestHandler from "../utils/requestHandler";
 import { AuthContext } from "../context/authContext";
 import { useRouter } from "next/router";
+import Navbar from '../components/Navbar';
 
 function Profile() {
   const router = useRouter();
@@ -57,6 +58,7 @@ function Profile() {
 
   return (
     <div className="flex bg-beige w-full justify-center flex-col ">
+      <Navbar />
       <button onClick={logout}>Logout</button>
       <div className=" bg-white mt-10 rounded-lg mx-72 pb-6 -mb-5">
         <div className="w-full bg-[url('./../public/images/profile.png')] bg-cover h-1/2 pt-48 pb-5">
