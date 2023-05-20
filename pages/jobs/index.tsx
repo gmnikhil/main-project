@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-import Jobpost from "../components/Jobpost";
-import { useWalletDetails } from "../hooks/walletDetails";
-import AddJobModal from "./company/modals/addJobModal";
+import Jobpost from "../../components/Jobpost";
+import { useWalletDetails } from "../../hooks/walletDetails";
+import AddJobModal from ".././company/modals/addJobModal";
 import { toast } from "react-toastify";
-import requestHandler from "../utils/requestHandler";
-import { AuthContext } from "../context/authContext";
-import Navbar from "../components/Navbar";
+import requestHandler from "../../utils/requestHandler";
+import { AuthContext } from "../../context/authContext";
+import Navbar from "../../components/Navbar";
 
 function Job() {
   const [jobs, setJobs] = useState([]);
@@ -28,8 +28,7 @@ function Job() {
       const jobCount = await (MainProjectContract as any).methods
         .jobCount()
         .call();
-      console.log(jobCount);
-      let j = [];
+      let j: any = [];
       for (let i = 0; i < jobCount; i++) {
         j[i] = await (MainProjectContract as any).methods.jobs(i).call();
         await requestHandler(
@@ -43,7 +42,7 @@ function Job() {
             throw new Error("Couldnt get company");
           });
       }
-      j = j.filter((p) => p.active == true);
+      j = j.filter((p: any) => p.active == true);
       setJobs(j as any);
     } catch (e) {
       console.log(e);

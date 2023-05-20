@@ -17,6 +17,8 @@ export default function AddJobModal({
   const [description, setDescription] = useState<string>();
   const [requirements, setRequirements] = useState<string>();
   const [eligibility, setEligibility] = useState<string>();
+  const [responsibilities, setResponsibilities] = useState<string>();
+  const [link, setLink] = useState<string>();
   const active = true;
 
   const { currentCompany } = useContext(AuthContext);
@@ -35,6 +37,8 @@ export default function AddJobModal({
           description,
           requirements,
           eligibility,
+          responsibilities,
+          link,
           active
         )
         .send({ from: acc });
@@ -42,6 +46,7 @@ export default function AddJobModal({
       setDescription("");
       setEligibility("");
       setRequirements("");
+      setResponsibilities("");
       handleUpdate();
     } catch (e) {
       console.log(e);
@@ -76,6 +81,14 @@ export default function AddJobModal({
           size="md"
         />
 
+        <label className="text-sm">Responsibilities</label>
+        <Textarea
+          onChange={(e) => setResponsibilities(e.target.value)}
+          className="mb-3"
+          placeholder="Enter Responsibilities for job..."
+          size="md"
+        />
+
         <label className="text-sm">Requirements</label>
         <Textarea
           onChange={(e) => setRequirements(e.target.value)}
@@ -92,10 +105,24 @@ export default function AddJobModal({
           size="md"
         />
 
+        <label className="text-sm">Apply Link</label>
+        <Input
+          onChange={(e) => setLink(e.target.value)}
+          className="mb-3"
+          placeholder="Enter job application link..."
+          size="md"
+        />
+
         <div className="mt-4 flex justify-end ">
           <Button
             className="text-white bg-baseColor"
-            disabled={!requirements || !eligibility || !title}
+            disabled={
+              !requirements ||
+              !eligibility ||
+              !title ||
+              !responsibilities ||
+              !link
+            }
             onClick={() => {
               handleUpload();
             }}
