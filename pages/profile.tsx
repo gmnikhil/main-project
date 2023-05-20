@@ -2,11 +2,19 @@ import Image from "next/image";
 import camera from "./../public/images/camera.png";
 import edit from "./../public/images/edit.png";
 import { useDisclosure } from "@mantine/hooks";
-import { Menu, Modal, TextInput, Button, Group, Box } from "@mantine/core";
+import {
+  Menu,
+  Modal,
+  TextInput,
+  Button,
+  Group,
+  Box,
+  MultiSelect,
+  NativeSelect,
+  Textarea,
+} from "@mantine/core";
 import { SimpleGrid } from "@mantine/core";
 import { Space } from "@mantine/core";
-import Link from "next/link";
-import { Divider } from "@mantine/core";
 import { Title } from "@mantine/core";
 import { Text, useMantineTheme } from "@mantine/core";
 import {
@@ -21,7 +29,8 @@ import { useContext, useEffect, useState } from "react";
 import requestHandler from "../utils/requestHandler";
 import { AuthContext } from "../context/authContext";
 import { useRouter } from "next/router";
-import Navbar from '../components/Navbar';
+import Navbar from "../components/Navbar";
+import { toast } from "react-toastify";
 
 function Profile() {
   const router = useRouter();
@@ -35,21 +44,135 @@ function Profile() {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [skills, setSkills] = useState([]);
+  const [interests, setInterests] = useState([]);
+  const [age, setAge] = useState<number>();
+  const [gender, setGender] = useState();
+  const [qualification, setQualification] = useState();
+  const [headline, setHeadline] = useState();
+  const [cgpa, setCGPA] = useState();
+  const [industry, setIndustry] = useState();
+  const [phone, setPhone] = useState<number>();
+  const [education, setEducation] = useState();
+  const [honours, setHonours] = useState();
+  const [projects, setProjects] = useState();
+  const [work_profile, setWorkProfile] = useState();
+  const [about, setAbout] = useState();
 
   const logout = () => {
     handleUserLogout();
     router.push("/auth/login");
   };
 
-  useEffect(() => {
-    if (!token) return;
+  const update = (user: any) => {
+    console.log(user);
+    setName(user.name);
+    setUsername(user.username);
+    setEmail(user.email);
+    setSkills(user?.skills ? user.skills : []);
+    setInterests(user?.interests ? user.interests : []);
+    setAge(user.age);
+    setGender(user.gender);
+    setQualification(user.qualification);
+    setHeadline(user.headline);
+    setCGPA(user.cgpa);
+    setIndustry(user.industry);
+    setPhone(user.phone);
+    setEducation(user.education);
+    setHonours(user.honours);
+    setProjects(user.projects);
+    setWorkProfile(user.work_profile);
+    setAbout(user.about);
+  };
+
+  const handleSectionSubmit = async () => {
+    console.log({
+      about,
+      education,
+      honours,
+      projects,
+      work_profile,
+    });
+
+    requestHandler(
+      "PATCH",
+      "/api/user/profile",
+      {
+        about,
+        education,
+        honours,
+        projects,
+        work_profile,
+      },
+      token
+    )
+      .then((res: any) => {
+        console.log(res);
+        update(res.data.user);
+        handlers2.close();
+      })
+      .catch((err: any) => {
+        console.log(err);
+        toast.error("Could not update!");
+      });
+  };
+
+  const handleInfoSubmit = async () => {
+    console.log({
+      name,
+      username,
+      email,
+      skills,
+      interests,
+      age,
+      gender,
+      qualification,
+      headline,
+      cgpa,
+      industry,
+      phone,
+    });
+    requestHandler(
+      "PATCH",
+      "/api/user/profile",
+      {
+        email,
+        skills: skills.map((s: any) => s.value).filter((v: any) => v != null),
+        interests: interests
+          .map((i: any) => i.value)
+          .filter((v: any) => v != null),
+        age,
+        gender,
+        qualification,
+        headline,
+        cgpa,
+        industry,
+        phone,
+      },
+      token
+    )
+      .then((res: any) => {
+        console.log(res);
+        update(res.data.user);
+        handlers1.close();
+      })
+      .catch((err: any) => {
+        console.log(err);
+        toast.error("Could not update!");
+      });
+  };
+
+  const getProfile = async () => {
     requestHandler("GET", "/api/user/profile", {}, token)
       .then((res: any) => {
-        setName(res.data.user.name);
-        setEmail(res.data.user.email);
-        setUsername(res.data.user.username);
+        update(res.data.user);
       })
       .catch((err: any) => console.log(err));
+  };
+
+  useEffect(() => {
+    if (!token) return;
+    getProfile();
   }, [token]);
 
   useEffect(() => {
@@ -63,7 +186,10 @@ function Profile() {
       <div className=" bg-white mt-10 rounded-lg mx-72 pb-6 -mb-5">
         <div className="w-full bg-[url('./../public/images/profile.png')] bg-cover h-1/2 pt-48 pb-5">
           <div className="flex justify-center items-center rounded-full w-60 h-60 bg-beige ml-10 ">
-            <Image src={camera} alt="camera image" className="w-20 h-20" />
+            <button onClick={handlers3.open}>
+              {" "}
+              <Image src={camera} alt="camera image" className="w-20 h-20" />
+            </button>
           </div>
         </div>
         <div className="flex justify-end my-8 mx-8">
@@ -71,55 +197,174 @@ function Profile() {
             <Image src={edit} alt="edit pen image" className=" h-7 w-7 " />
           </button>
           <Modal
+            opened={opened3}
+            onClose={handlers3.close}
+            className="p-80"
+            centered
+          >
+            <Dropzone
+              onDrop={(files) => console.log("accepted files", files)}
+              onReject={(files) => console.log("rejected files", files)}
+              accept={IMAGE_MIME_TYPE}
+            >
+              <Group
+                position="center"
+                spacing="xl"
+                style={{ pointerEvents: "none" }}
+              >
+                <Dropzone.Accept>
+                  <IconUpload
+                    size="3.2rem"
+                    stroke={1.5}
+                    color={
+                      theme.colors[theme.primaryColor][
+                        theme.colorScheme === "dark" ? 4 : 6
+                      ]
+                    }
+                  />
+                </Dropzone.Accept>
+                <Dropzone.Reject>
+                  <IconX
+                    size="3.2rem"
+                    stroke={1.5}
+                    color={
+                      theme.colors.red[theme.colorScheme === "dark" ? 4 : 6]
+                    }
+                  />
+                </Dropzone.Reject>
+                <Dropzone.Idle>
+                  <IconPhoto size="3.2rem" stroke={1.5} />
+                </Dropzone.Idle>
+
+                <div>
+                  <Text size="xl" inline>
+                    Drag image here or click to select image
+                  </Text>
+                </div>
+              </Group>
+            </Dropzone>
+          </Modal>
+          <Modal
             opened={opened}
             onClose={handlers1.close}
             title="Edit Profile"
             size="70%"
           >
             <Box my={"xl"}>
+              <Space h="xl" />
               <SimpleGrid cols={2} spacing="lg">
                 <div>
                   <TextInput
                     withAsterisk
-                    label=" First Name"
-                    placeholder="First Name"
+                    label="Age"
+                    placeholder="Age"
+                    value={age}
+                    type="number"
+                    onChange={(e: any) => {
+                      setAge(e.target.value);
+                    }}
                   />
                 </div>
                 <div>
-                  <TextInput
+                  <NativeSelect
+                    data={["Male", "Female", "Trans", "Others"]}
+                    label="Choose your gender"
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value as any)}
                     withAsterisk
-                    label="Last Name"
-                    placeholder="Last Name"
                   />
                 </div>
               </SimpleGrid>
               <Space h="xl" />
-              <SimpleGrid cols={2} spacing="lg">
-                <div>
-                  <TextInput withAsterisk label="Age" placeholder="Age" />
-                </div>
-                <div>
-                  <TextInput withAsterisk label="Gender" placeholder="Gender" />
-                </div>
-              </SimpleGrid>
+              <TextInput
+                label="Headline"
+                placeholder="Headline"
+                value={headline}
+                onChange={(e: any) => {
+                  setHeadline(e.target.value);
+                }}
+              />
               <Space h="xl" />
-              <TextInput label="Headline" placeholder="Headline" />
+              <TextInput
+                label="Contact Infomation"
+                placeholder="Phone"
+                value={phone}
+                onChange={(e: any) => setPhone(e.target.value)}
+                type="number"
+              />
+              <TextInput
+                label="Email"
+                placeholder="email@somewhere.com"
+                value={email}
+                onChange={(e: any) => setEmail(e.target.value)}
+                type="text"
+              />
               <Space h="xl" />
-              <TextInput label="Contact Infomation" placeholder="Email" />
+              <TextInput
+                label="Qualification"
+                placeholder="Qualification"
+                value={qualification}
+                onChange={(e: any) => {
+                  setQualification(e.target.value);
+                }}
+              />
               <Space h="xl" />
-              <TextInput label="Qualification" placeholder="Qualification" />
+              <MultiSelect
+                label="Skills"
+                data={skills}
+                defaultValue={skills}
+                placeholder="Enter your skills"
+                searchable
+                creatable
+                getCreateLabel={(query: any) => `+ Create ${query}`}
+                onCreate={(query: any) => {
+                  const item = { value: query, label: query };
+                  setSkills((current: any) => [...current, item] as any);
+                  return item;
+                }}
+              />
               <Space h="xl" />
-              <TextInput label="Tech Skills" placeholder="Tech Skills" />
-              <Space h="xl" />
-              <TextInput label="Industry" placeholder="Industry" />
+              <TextInput
+                label="Industry"
+                placeholder="Industry"
+                value={industry}
+                onChange={(e: any) => {
+                  setIndustry(e.target.value);
+                }}
+              />
 
               <Space h="xl" />
-              <TextInput label="Interests" placeholder="Interests" />
+              <MultiSelect
+                label="Interests"
+                data={interests}
+                defaultValue={interests}
+                placeholder="Enter your interests"
+                searchable
+                creatable
+                getCreateLabel={(query: any) => `+ Create ${query}`}
+                onCreate={(query: any) => {
+                  const item = { value: query, label: query };
+                  setInterests((current: any) => [...current, item] as any);
+                  return item;
+                }}
+              />
               <Space h="xl" />
-              <TextInput label="CGPA" placeholder="CGPA" />
+              <TextInput
+                label="CGPA"
+                placeholder="CGPA"
+                value={cgpa}
+                onChange={(e: any) => setCGPA(e.target.value)}
+              />
 
               <Group position="center" mt="xl">
-                <Button color="red" className=" bg-red-500 text-md my-10">
+                <Button
+                  color="red"
+                  className=" bg-red-500 text-md my-10"
+                  onClick={(e: any) => {
+                    e.preventDefault();
+                    handleInfoSubmit();
+                  }}
+                >
                   Submit
                 </Button>
               </Group>
@@ -168,108 +413,70 @@ function Profile() {
                 <Title order={3} className="mb-7">
                   Add Profile Section
                 </Title>
-                <Modal
-                  opened={opened3}
-                  onClose={handlers3.close}
-                  className="p-80"
-                  centered
-                >
-                  <Dropzone
-                    onDrop={(files) => console.log("accepted files", files)}
-                    onReject={(files) => console.log("rejected files", files)}
-                    accept={IMAGE_MIME_TYPE}
-                  >
-                    <Group
-                      position="center"
-                      spacing="xl"
-                      style={{ pointerEvents: "none" }}
-                    >
-                      <Dropzone.Accept>
-                        <IconUpload
-                          size="3.2rem"
-                          stroke={1.5}
-                          color={
-                            theme.colors[theme.primaryColor][
-                              theme.colorScheme === "dark" ? 4 : 6
-                            ]
-                          }
-                        />
-                      </Dropzone.Accept>
-                      <Dropzone.Reject>
-                        <IconX
-                          size="3.2rem"
-                          stroke={1.5}
-                          color={
-                            theme.colors.red[
-                              theme.colorScheme === "dark" ? 4 : 6
-                            ]
-                          }
-                        />
-                      </Dropzone.Reject>
-                      <Dropzone.Idle>
-                        <IconPhoto size="3.2rem" stroke={1.5} />
-                      </Dropzone.Idle>
 
-                      <div>
-                        <Text size="xl" inline>
-                          Drag images here or click to select files
-                        </Text>
-                        <Text size="sm" color="dimmed" inline mt={7}>
-                          Attach as many files as you like, each file should not
-                          exceed 5mb
-                        </Text>
-                      </div>
-                    </Group>
-                  </Dropzone>
-                </Modal>
-                <Link href="#" onClick={handlers3.open}>
-                  <div className="text-gray-500">
-                    <p>Add Profile Photo</p>
-                  </div>
-                </Link>
-                <Divider my="sm" />
-                <Link href="#">
-                  <div className="text-gray-500">
-                    <p>Add Education</p>
-                  </div>
-                </Link>
-                <Divider my="sm" />
-                <Link href="#">
-                  <div className="text-gray-500">
-                    <p>Add Position</p>
-                  </div>
-                </Link>
-                <Divider my="sm" />
-                <Link href="#">
-                  <div className="text-gray-500">
-                    <p>Add Career Break</p>
-                  </div>
-                </Link>
-                <Divider my="sm" />
-                <Link href="#">
-                  <div className="text-gray-500">
-                    <p>Add Profile Photo</p>
-                  </div>
-                </Link>
-                <Divider my="sm" />
-                <Link href="#">
-                  <div className="text-gray-500">
-                    <p>Add Skills</p>
-                  </div>
-                </Link>
-                <Divider my="sm" />
-                <Link href="#">
-                  <div className="text-gray-500">
-                    <p>Add Awards</p>
-                  </div>
-                </Link>
-                <Divider my="sm" />
-                <Link href="#">
-                  <div className="text-gray-500">
-                    <p>Add Projects</p>
-                  </div>
-                </Link>
-                <Divider my="sm" className="mb-12" />
+                <div className="text-gray-500">
+                  <Textarea
+                    value={about}
+                    onChange={(e: any) => setAbout(e.target.value)}
+                    placeholder="What kind of a person are you?"
+                    label="Add About"
+                    autosize
+                    minRows={3}
+                  />
+                </div>
+
+                <div className="text-gray-500 mt-5">
+                  <Textarea
+                    value={education}
+                    onChange={(e: any) => setEducation(e.target.value)}
+                    placeholder="Enter your education background"
+                    label="Add Education"
+                    autosize
+                    minRows={3}
+                  />
+                </div>
+
+                <div className="text-gray-500 mt-5">
+                  <Textarea
+                    value={work_profile}
+                    onChange={(e: any) => setWorkProfile(e.target.value)}
+                    placeholder="Enter your career details"
+                    label="Add Work Profile"
+                    autosize
+                    minRows={3}
+                  />
+                </div>
+
+                <div className="text-gray-500 mt-5">
+                  <Textarea
+                    value={honours}
+                    onChange={(e: any) => setHonours(e.target.value)}
+                    placeholder="Showcase your Prizes"
+                    label="Add Honours"
+                    autosize
+                    minRows={3}
+                  />
+                </div>
+
+                <div className="text-gray-500 mt-5">
+                  <Textarea
+                    value={projects}
+                    onChange={(e: any) => setProjects(e.target.value)}
+                    placeholder="Describe your Projects"
+                    label="Add Projects"
+                    autosize
+                    minRows={3}
+                  />
+                </div>
+                <div className="mt-5 flex justify-center">
+                  <Button
+                    variant="filled"
+                    className="bg-red-400"
+                    onClick={handleSectionSubmit}
+                  >
+                    Update
+                  </Button>
+                </div>
               </Modal>
               <Button
                 color="red"
@@ -312,13 +519,14 @@ function Profile() {
           </Title>
 
           <p className="">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+            {about ||
+              `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
             posuere sapien quis ante ultrices tempus. Ut et ante mauris. Proin
             tincidunt finibus metus. Aliquam erat volutpat. Donec est odio,
             suscipit id molestie vitae, ultricies eu nunc. Etiam turpis erat,
             scelerisque vel ornare vel, bibendum a nisl. Duis sit amet dolor
             nisl. Pellentesque vitae erat aliquam, elementum enim sed, dignissim
-            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.
+            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.`}
           </p>
         </div>
       </div>
@@ -329,13 +537,14 @@ function Profile() {
           </Title>
 
           <p className="">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+            {education ||
+              `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
             posuere sapien quis ante ultrices tempus. Ut et ante mauris. Proin
             tincidunt finibus metus. Aliquam erat volutpat. Donec est odio,
             suscipit id molestie vitae, ultricies eu nunc. Etiam turpis erat,
             scelerisque vel ornare vel, bibendum a nisl. Duis sit amet dolor
             nisl. Pellentesque vitae erat aliquam, elementum enim sed, dignissim
-            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.
+            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.`}
           </p>
         </div>
       </div>
@@ -346,13 +555,15 @@ function Profile() {
           </Title>
 
           <p className="">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+            {skills?.length > 0
+              ? skills.join(", ")
+              : `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
             posuere sapien quis ante ultrices tempus. Ut et ante mauris. Proin
             tincidunt finibus metus. Aliquam erat volutpat. Donec est odio,
             suscipit id molestie vitae, ultricies eu nunc. Etiam turpis erat,
             scelerisque vel ornare vel, bibendum a nisl. Duis sit amet dolor
             nisl. Pellentesque vitae erat aliquam, elementum enim sed, dignissim
-            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.
+            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.`}
           </p>
         </div>
       </div>
@@ -363,13 +574,15 @@ function Profile() {
           </Title>
 
           <p className="">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+            {interests?.length > 0
+              ? interests.join(", ")
+              : `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
             posuere sapien quis ante ultrices tempus. Ut et ante mauris. Proin
             tincidunt finibus metus. Aliquam erat volutpat. Donec est odio,
             suscipit id molestie vitae, ultricies eu nunc. Etiam turpis erat,
             scelerisque vel ornare vel, bibendum a nisl. Duis sit amet dolor
             nisl. Pellentesque vitae erat aliquam, elementum enim sed, dignissim
-            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.
+            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.`}
           </p>
         </div>
       </div>

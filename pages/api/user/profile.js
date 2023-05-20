@@ -20,13 +20,25 @@ export default async function handler(req, res) {
       break;
     case "PATCH":
       try {
-        console.log(req.body);
+        //console.log(req.body);
         const { user } = await verifyToken(req);
         if (!user) throw new Error("User Token verification Error");
         const { _id } = user;
-        const updated_user = await User.findOneAndUpdate(_id, req.body, {
-          new: true,
-        });
+
+        delete req.body.name;
+        delete req.body.username;
+        delete req.body.password;
+
+        console.log(_id);
+
+        const updated_user = await User.findOneAndUpdate(
+          _id,
+          { $set: req.body },
+          {
+            new: true,
+          }
+        );
+        console.log(updated_user);
         res.status(201).json({ success: true, user: updated_user });
       } catch (error) {
         console.log(error);
