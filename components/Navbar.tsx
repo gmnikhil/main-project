@@ -10,6 +10,7 @@ function Navbar()
             <Link href="../profile">Profile</Link>
             <Link href="../chat/list" className="ml-4">Messages</Link>
             <Link href="../job" className="ml-4">Job</Link>
+            <Link href="../predict" className="ml-4">Predict</Link>
             <Link href="../auth/login" className="ml-4">Logout</Link>
           </ul>
         </nav>
