@@ -9,7 +9,6 @@ const likeSchema = new mongoose.Schema(
     },
     liker: {
       type: mongoose.Schema.Types.ObjectId,
-      refPath: "likerType",
       required: true,
     },
     post_id: {

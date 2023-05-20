@@ -13,19 +13,7 @@ export default async function handler(req, res) {
         await verifyToken(req);
         const { liker, post_id } = req.query;
         if (!liker || !post_id) throw new Error("Invalid Parameters");
-        const liked = await Like.findOne({ liker, post_id })
-          .populate({
-            path: "liker",
-            model: function (doc) {
-              if (doc.likerType === "user") {
-                return "User";
-              } else {
-                return "Company";
-              }
-            },
-          })
-          .lean()
-          .exec();
+        const liked = await Like.findOne({ liker, post_id }).lean().exec();
         if (liked) res.status(200).json({ success: true, liked: !!liked });
       } catch (e) {
         res.status(400).json({ success: false });
@@ -33,7 +21,7 @@ export default async function handler(req, res) {
       break;
     case "POST":
       try {
-        const x = await verifyToken();
+        const x = await verifyToken(req);
         if (x.type == "company") {
           if (req.body.liker != x.company._id)
             throw new Error("Unauthorized Like");
@@ -51,16 +39,17 @@ export default async function handler(req, res) {
       break;
     case "DELETE":
       try {
-        const x = await verifyToken();
+        const x = await verifyToken(req);
+
         if (x.type == "company") {
-          if (req.body.liker != x.company._id)
+          if (req.query.liker != x.company._id)
             throw new Error("Unauthorized Unlike");
         } else {
-          if (req.body.liker != x.user._id)
+          if (req.query.liker != x.user._id)
             throw new Error("Unauthorized Unlike");
         }
-        const { post_id, liker } = req.body;
-        console.log(req.body);
+        const { post_id, liker } = req.query;
+
         await Like.findOneAndDelete({ post_id, liker });
 
         res.status(200).json({ success: true });

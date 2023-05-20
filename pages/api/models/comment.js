@@ -9,7 +9,6 @@ const commentSchema = new mongoose.Schema(
     },
     commentor: {
       type: mongoose.Schema.Types.ObjectId,
-      refPath: "commentorType",
       required: true,
     },
     post_id: {
