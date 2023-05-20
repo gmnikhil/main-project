@@ -64,9 +64,15 @@ function jobdesc() {
           </p>
           <p className="font-josefin text-2xl mt-2">{job.company.email}</p>
           {/* <p className="font-josefin text-lg mt-1">Uploaded 19 minutes ago</p> */}
-          <Button variant="outline" color="red" className="mt-7">
+
+          <Button variant="outline" color="blue" className="mt-7">
             Follow
           </Button>
+          <Link href={"/jobs/reports/" + jobID}>
+            <Button variant="filled" color="red" className="mt-7 bg-red-400">
+              View Reports
+            </Button>
+          </Link>
         </div>
       </div>
       <div className=" pl-10 w-2/3 pr-20 bg-beige pb-5 overflow-y-scroll">

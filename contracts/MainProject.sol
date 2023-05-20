@@ -45,7 +45,9 @@ contract MainProject {
     }
 
     struct Report {
-        address user;
+        uint job_id;
+        string creator_id;
+        string creator_type;
         string comment;
         string file_link;
         string created_on;
@@ -76,19 +78,19 @@ contract MainProject {
         owners.push(Owner(msg.sender, 'Main Project Admin'));
     }
 
-    function addReport(string memory _comment, string memory _file_link, string memory created_on) public {
-        reports.push(Report(msg.sender, _comment, _file_link, created_on, "", reportCount));
+    function addReport(string memory _comment, string memory _file_link, string memory created_on, string memory _creator_id, string memory _creatorType, uint _job_id) public {
+        reports.push(Report(_job_id, _creator_id, _creatorType, _comment, _file_link, created_on, "", reportCount));
         reportCount++;
     }
 
-    function editReport(uint _index, string memory _comment, string memory _file_link, string memory _updated_on) public {
-        Report memory _r = reports[_index];
-        _r.comment = _comment;
-        _r.file_link = _file_link;
-        _r.updated_on = _updated_on;
+    // function editReport(uint _index, string memory _comment, string memory _file_link, string memory _updated_on) public {
+    //     Report memory _r = reports[_index];
+    //     _r.comment = _comment;
+    //     _r.file_link = _file_link;
+    //     _r.updated_on = _updated_on;
 
-        reports[_index] = _r;
-    }
+    //     reports[_index] = _r;
+    // }
 
     function addJob(string memory _company_id, string memory _title, string memory _description, string memory _requirements, string memory _eligibility, string memory _responsibilities, string memory _link, bool _active) public {
         jobs.push(Job(_company_id, _title, _description, _requirements, _eligibility, _responsibilities, _link, _active, jobCount));

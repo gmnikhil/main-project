@@ -5,6 +5,9 @@ import { AuthContext } from "../../../context/authContext";
 import requestHandler from "../../../utils/requestHandler";
 import { toast } from "react-toastify";
 import InputEmoji from "react-input-emoji";
+import { Button } from "@mantine/core";
+import { DragAndDrop } from "../../../components";
+import { storeFile } from "../../../utils/storeFile";
 
 export default function ReportsPage() {
   const [reports, setReports] = useState([]);
@@ -14,16 +17,58 @@ export default function ReportsPage() {
   const { token, currentUser, currentCompany } = useContext(AuthContext);
   const [job, setJob] = useState<any>();
   const [new_report, setNewReport] = useState();
+  const [file, setFile] = useState();
 
-  const handleNewReport = (e: any) => {
-    e.preventDefault();
+  const handleFile = (file: any) => {
+    setFile(file);
+  };
+
+  const handleNewReport = async () => {
+    let file_link = "";
+    const created_on = new Date().toISOString();
+    let creator_id, creatorType;
+    if (currentUser) {
+      creator_id = currentUser._id;
+      creatorType = "user";
+    } else {
+      creator_id = currentCompany._id;
+      creatorType = "company";
+    }
+
+    try {
+      if (file) {
+        const res = await storeFile(file, "report_file", "report");
+
+        if (!res.data) throw Error(`Could'nt upload file`);
+
+        file_link =
+          `https://ipfs.io/` +
+          res.data.data.image.href.replace(":", "").replace("//", "/");
+      }
+
+      await (MainProjectContract as any).methods
+        .addReport(
+          new_report,
+          file_link,
+          created_on,
+          creator_id,
+          creatorType,
+          jobID
+        )
+        .send({ from: acc });
+
+      setFile(undefined);
+
+      fetchReports();
+    } catch (e) {
+      console.log(e);
+      toast.error("Something went wrong");
+    }
   };
 
   async function fetchJob() {
-    console.log(jobID);
     try {
       const j = await (MainProjectContract as any).methods.jobs(jobID).call();
-      console.log(j);
       await requestHandler(
         "POST",
         "/api/company/details",
@@ -49,17 +94,35 @@ export default function ReportsPage() {
       let r: any = [];
       for (let i = 0; i < reportCount; i++) {
         r[i] = await (MainProjectContract as any).methods.reports(i).call();
-        //   await requestHandler(
-        //     "POST",
-        //     "/api/company/details",
-        //     { company_id: j[i].company_id },
-        //     token
-        //   )
-        //     .then((r: any) => (j[i].company = r.data.company))
-        //     .catch((e: any) => {
-        //       throw new Error("Couldnt get company");
-        //     });
+        if (r[i].job_id != jobID) continue;
+
+        if (r[i].creatorType == "user") {
+          await requestHandler(
+            "POST",
+            "/api/user/details",
+            { user_id: r[i].creator_id },
+            token
+          )
+            .then((res: any) => (r[i].creator = res.data.user))
+            .catch((e: any) => {
+              throw new Error("Couldnt get user");
+            });
+        } else {
+          await requestHandler(
+            "POST",
+            "/api/company/details",
+            { company_id: r[i].creator_id },
+            token
+          )
+            .then((res: any) => (r[i].creator = res.data.company))
+            .catch((e: any) => {
+              throw new Error("Couldnt get company");
+            });
+        }
       }
+      console.log(r);
+      r.filter((rep: any) => rep.job_id == jobID);
+      console.log(r);
       setReports(r as any);
     } catch (e) {
       console.log(e);
@@ -76,6 +139,10 @@ export default function ReportsPage() {
   useEffect(() => {
     if (jobID && acc) fetchJob();
   }, [jobID, acc]);
+
+  useEffect(() => {
+    if (acc && job) fetchReports();
+  }, [job, acc]);
 
   if (!job)
     return (
@@ -95,23 +162,37 @@ export default function ReportsPage() {
         <div>
           <ul>
             {reports &&
-              reports.map((msg: any, i) => {
-                if (
-                  msg.from == currentUser?._id ||
-                  msg.from == currentCompany?._id
-                )
-                  return (
-                    <li key={i}>
-                      {currentUser.name}: {msg.body}
-                    </li>
-                  );
+              reports.map((report: any, i) => {
                 return (
-                  <li key={i}>
-                    {job.creator.name}: {msg.body}
-                  </li>
+                  <div key={i}>
+                    <img src={report.file_link} />
+                    <li>
+                      {report.creator.name}: {report.comment}
+                    </li>
+                  </div>
                 );
               })}
           </ul>
+        </div>
+
+        <div className="w-full mx-auto my-5">
+          {file ? (
+            <div className="relative">
+              <img
+                className="mx-auto"
+                src={URL.createObjectURL(file)}
+                style={{ maxHeight: "100px" }}
+              />
+              <Button
+                className="text-white bg-red-600 absolute right-0"
+                onClick={() => setFile(undefined)}
+              >
+                Delete
+              </Button>
+            </div>
+          ) : (
+            <DragAndDrop handleFile={handleFile} />
+          )}
         </div>
         <div className="absolute bottom-10 w-5/6 h-14 flex flex-row items-center bg-off-white overflow-hidden">
           <InputEmoji
