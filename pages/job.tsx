@@ -5,6 +5,7 @@ import AddJobModal from "./company/modals/addJobModal";
 import { toast } from "react-toastify";
 import requestHandler from "../utils/requestHandler";
 import { AuthContext } from "../context/authContext";
+import Navbar from "../components/Navbar";
 
 function Job() {
   const [jobs, setJobs] = useState([]);
@@ -58,6 +59,7 @@ function Job() {
         handleUpdate={handleJobPosted}
         open={add_job_modal_opened}
       />
+      <Navbar />
       <button
         onClick={() => {
           setAddJobModalOpened(true);

@@ -6,6 +6,7 @@ import { Divider,TextInput } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import Image from "next/image";
 import Chat from "./../../public/images/Chat.png";
+import Navbar from "../../components/Navbar";
 
 
 export default function ChatList() {
@@ -35,7 +36,9 @@ export default function ChatList() {
   });
 
   return (
-    <div className="bg-off-white p-10 h-screen flex flex-row ">
+    <>
+      <Navbar />
+      <div className="bg-off-white p-10 h-screen flex flex-row ">
       <div className="bg-white w-1/3 h-full overflow-y-scroll">
       <TextInput
         placeholder="Search"
@@ -71,5 +74,7 @@ export default function ChatList() {
       <Image src={Chat} alt="sign in image" height={1000} width={900} />
       
     </div>
+    </>
+
   );
 }
