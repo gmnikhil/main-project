@@ -1,6 +1,8 @@
 import dbConnect from "../lib/db";
 import { verifyToken } from "../middlewares/handle_token";
 import Comment from "../models/comment";
+import User from "../models/user";
+import Company from "../models/company";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -11,28 +13,28 @@ export default async function handler(req, res) {
     case "GET":
       try {
         await verifyToken(req);
-        const comments = await Comment.find(req.query)
-          .populate({
-            path: "commentor",
-            model: function (doc) {
-              if (doc.commentorType === "user") {
-                return "User";
-              } else {
-                return "Company";
-              }
-            },
+        const comments = await Comment.find(req.query).lean().exec();
+        const populatedComments = await Promise.all(
+          comments.map(async (comment) => {
+            if (comment.commentorType === "user") {
+              const user = await User.findById(comment.commentor).lean().exec();
+              return { ...comment, commentor: user };
+            } else {
+              const company = await Company.findById(comment.commentor)
+                .lean()
+                .exec();
+              return { ...comment, commentor: company };
+            }
           })
-          .lean()
-          .exec();
-        console.log(comments);
-        res.status(200).json({ success: true, comments });
+        );
+        res.status(200).json({ success: true, comments: populatedComments });
       } catch (error) {
         res.status(400).json({ success: false });
       }
       break;
     case "POST":
       try {
-        const x = await verifyToken();
+        const x = await verifyToken(req);
         if (x.type == "company") {
           if (req.body.commentor != x.company._id)
             throw new Error("Unauthorized Comment");
@@ -44,6 +46,7 @@ export default async function handler(req, res) {
         const comment = await Comment.create(req.body);
         res.status(201).json({ success: true, comment });
       } catch (error) {
+        console.log(error);
         res.status(400).json({ success: false });
       }
       break;

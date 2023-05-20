@@ -1,5 +1,6 @@
 import { TextInput, Checkbox, Button, Group, Box } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import Navbar from '../components/Navbar';
 
 function Predict() {
   
@@ -19,6 +20,8 @@ function Predict() {
   });
 
   return (
+    <>
+    <Navbar />
     <div className='bg-beige h-screen pt-20'>
         <Box maw={300} mx="auto" >
       <form onSubmit={form.onSubmit((values) => console.log(values))}>
@@ -60,7 +63,7 @@ function Predict() {
       </form>
     </Box>
     </div>
-    
+   </> 
   );
 }
 export default Predict;
