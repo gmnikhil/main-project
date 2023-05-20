@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/authContext";
 import { useRouter } from "next/router";
 import requestHandler from "../../utils/requestHandler";
+import Navbarlogin from "../../components/Navbarlogin";
 
 function signUp() {
   const router = useRouter();
@@ -45,9 +46,11 @@ function signUp() {
   }, [currentUser]);
 
   return (
-    <div className=" h-screen">
+    <>
+    <Navbarlogin />
+    <div className=" h-fixed">
       <div className="flex flex-row">
-        <div className="h-screen bg-off-white w-3/5 pl-7 pt-2 overflow-hidden">
+        <div className=" bg-off-white w-3/5 pl-7 pt-2 overflow-hidden">
           <Image src={signup} alt="sign in image" height={1000} width={900} />
         </div>
         <div className="flex flex-col pl-28 mt-12">
@@ -67,7 +70,7 @@ function signUp() {
               name="username"
               onChange={(e) => setUsername(e.target.value)}
               value={username}
-              className="border-solid border-2 border-black h-11 pl-4 mt-16 w-96  rounded-lg  "
+              className="border-solid border-2 border-black h-11 pl-4 mt-7 w-96  rounded-lg  "
             ></input>
             <input
               type={"email"}
@@ -105,6 +108,7 @@ function signUp() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

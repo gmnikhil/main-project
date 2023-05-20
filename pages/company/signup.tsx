@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/authContext";
 import { useRouter } from "next/router";
 import requestHandler from "../../utils/requestHandler";
+import Navbarlogin from "../../components/Navbarlogin";
 
 function signUp() {
   const router = useRouter();
@@ -42,12 +43,12 @@ function signUp() {
   }, [currentCompany]);
 
   return (
-    <div className=" h-screen">
-      <div className="flex flex-row">
-        <div className="h-screen bg-off-white w-3/5 pl-7 pt-2 overflow-hidden">
-          <Image src={signup} alt="sign in image" height={1000} width={900} />
-        </div>
-        <div className="flex flex-col pl-28 mt-12">
+    <>
+    <Navbarlogin />
+    <div className=" h-fixed">
+      <div className="flex flex-row justify-between overflow-y-hidden">
+        
+        <div className="flex flex-col pl-44 mt-12">
           <p className="mt-10  font-fredoka text-5xl text-peach">Sign Up</p>
           <form className="flex flex-col">
             <input
@@ -93,8 +94,12 @@ function signUp() {
             </Link>
           </div>
         </div>
+        <div className="bg-off-white w-3/5 pl-7 pt-2 ">
+          <Image src={signup} alt="sign in image" height={100} width={900} />
+        </div>
       </div>
     </div>
+    </>
   );
 }
 

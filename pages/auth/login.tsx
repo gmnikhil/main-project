@@ -8,6 +8,7 @@ import axios from "axios";
 import requestHandler from "../../utils/requestHandler";
 import { AuthContext } from "../../context/authContext";
 import { useRouter } from "next/router";
+import Navbarlogin from "../../components/Navbarlogin";
 
 const roboto = Roboto({
   weight: "700",
@@ -44,6 +45,8 @@ function SignIn() {
   }, [currentUser]);
 
   return (
+    <>
+    <Navbarlogin />
     <div className="flex flex-row justify-evenly mt-0 ">
       <div className="flex flex-col space-y-8 mt-40 ">
         <p className="font-fredoka text-6xl  text-peach">Welcome</p>
@@ -81,11 +84,22 @@ function SignIn() {
             Create New Account
           </Link>
         </div>
+        <div className="relative flex py-0 items-center">
+          <div className="flex-grow border-t border-gray-400"></div>
+          <span className="flex-shrink mx-4 text-gray-400">Or</span>
+          <div className="flex-grow border-t border-gray-400"></div>
+        </div>
+        <div className="flex justify-center ">
+          <Link href="../company/login" className="">
+            Company Login
+          </Link>
+        </div>
       </div>
-      <div className="pl-80 mr-0">
+      <div className="flex justify-center pl-0 mr-0 mt-20">
         <Image src={signin} alt="sign in image" width={700} />
       </div>
     </div>
+    </>
   );
 }
 
