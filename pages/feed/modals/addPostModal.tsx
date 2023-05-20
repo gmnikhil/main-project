@@ -1,7 +1,6 @@
 import { Input, Textarea, Button, Modal, Select } from "@mantine/core";
 import { storeFile } from "../../../utils/storeFile";
 import { toast } from "react-toastify";
-import { useWalletDetails } from "../../../hooks/walletDetails";
 import { DragAndDrop } from "../../../components";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../../context/authContext";

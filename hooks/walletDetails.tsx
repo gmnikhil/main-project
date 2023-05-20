@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Web3 from "web3";
 import data from "../MainProject.json";
+import contractConfig from "../contract-config.json";
 
 declare global {
   interface Window {
@@ -10,7 +11,7 @@ declare global {
 }
 
 export function useWalletDetails() {
-  const contract_address = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  const contract_address = contractConfig.address;
 
   async function loadWeb3() {
     if (window.ethereum) {

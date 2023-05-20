@@ -18,7 +18,7 @@ function AuthContextProvider(props: any) {
   const handleCompany = (company: any) => {
     setCurrentCompany(company);
     if (company) handleUserLogout();
-    localStorage.setItem("projectCompany", company);
+    localStorage.setItem("projectCompany", JSON.stringify(company));
   };
 
   const handleToken = (token: any) => {
