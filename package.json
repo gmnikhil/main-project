@@ -9,7 +9,7 @@
     "lint": "next lint",
     "node": "npx hardhat node --tsconfig hardhat/tsconfig.json",
     "compile": "npx hardhat compile --tsconfig hardhat/tsconfig.json",
-    "deploy": "npx hardhat run scripts/deploy.ts --tsconfig hardhat/tsconfig.json"
+    "deploy": "npx hardhat run scripts/deploy.ts --tsconfig hardhat/tsconfig.json --network ganache"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",

@@ -1,5 +1,6 @@
 import { ethers } from "hardhat";
 import path from "path";
+import fs from "fs";
 import * as child_process from "child_process";
 
 function copyABI() {
@@ -17,6 +18,17 @@ async function main() {
 
   await main_project.deployed();
   console.log("MainProject deployed to:", main_project.address);
+
+  const jsonContent = { address: main_project.address };
+  const jsonString = JSON.stringify(jsonContent);
+
+  fs.writeFile("contract-config.json", jsonString, "utf8", (err) => {
+    if (err) {
+      console.error("Error saving JSON file:", err);
+      return;
+    }
+    console.log("JSON file saved successfully!");
+  });
 
   copyABI();
 }

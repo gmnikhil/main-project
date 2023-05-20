@@ -33,6 +33,7 @@ contract MainProject {
     }
 
     struct Job {
+        string company_id;
         string title;
         string description;
         string requirements;
@@ -87,8 +88,8 @@ contract MainProject {
         reports[_index] = _r;
     }
 
-    function addJob(string memory _title, string memory _description, string memory _requirements, string memory _eligibility, bool _active) public {
-        jobs.push(Job(_title, _description, _requirements, _eligibility, _active, jobCount));
+    function addJob(string memory _company_id, string memory _title, string memory _description, string memory _requirements, string memory _eligibility, bool _active) public {
+        jobs.push(Job(_company_id, _title, _description, _requirements, _eligibility, _active, jobCount));
         jobCount++;
     }
 
