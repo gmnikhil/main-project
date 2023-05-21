@@ -95,7 +95,7 @@ function PublicProfile() {
             className={`w-full relative bg-cover h-1/2 pt-48 pb-5`}
             style={{
               backgroundImage: `url(${
-                banner ? banner : "../../public/images/profile.png"
+                banner ? banner : "https://picsum.photos/1400"
               })`,
             }}
           >
@@ -120,9 +120,7 @@ function PublicProfile() {
                 <Menu shadow="md" width={200}>
                   <Menu.Target>
                     <Button
-                      onClick={() => {
-                        router.push("/chat/list");
-                      }}
+                      onClick={() => {}}
                       color="red"
                       className="bg-red-500 text-md rounded-3xl "
                     >

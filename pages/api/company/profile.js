@@ -24,9 +24,13 @@ export default async function handler(req, res) {
         const { company } = await verifyToken(req);
         if (!company) throw new Error("Company Token verification Error");
         const { _id } = company;
-        const updated_company = await Company.findOneAndUpdate(_id, req.body, {
-          new: true,
-        });
+        const updated_company = await Company.findOneAndUpdate(
+          _id,
+          { $set: req.body },
+          {
+            new: true,
+          }
+        );
         res.status(201).json({ success: true, company: updated_company });
       } catch (error) {
         console.log(error);

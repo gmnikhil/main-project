@@ -15,6 +15,21 @@ const companySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  about: {
+    type: String,
+  },
+  work: {
+    type: String,
+  },
+  environment: {
+    type: String,
+  },
+  avatar: {
+    type: String,
+  },
+  banner: {
+    type: String,
+  },
 });
 
 export default mongoose.models.Company ||

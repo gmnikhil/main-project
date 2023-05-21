@@ -55,10 +55,6 @@ function Profile() {
   const [avatar, setAvatar] = useState();
   const [banner, setBanner] = useState();
 
-  const logout = () => {
-    handleUserLogout();
-    router.push("/auth/login");
-  };
   // console.log(currentUser._id);
 
   const handleAvatarUpload = async (file: any) => {
@@ -257,7 +253,7 @@ function Profile() {
             className={`w-full relative bg-cover h-1/2 pt-48 pb-5`}
             style={{
               backgroundImage: `url(${
-                banner ? banner : "../../public/images/profile.png"
+                banner ? banner : "https://picsum.photos/1400"
               })`,
             }}
           >
@@ -440,9 +436,6 @@ function Profile() {
                 <Menu shadow="md" width={200}>
                   <Menu.Target>
                     <Button
-                      onClick={() => {
-                        router.push("/chat/list");
-                      }}
                       color="red"
                       className="bg-red-500 text-md rounded-3xl "
                     >
