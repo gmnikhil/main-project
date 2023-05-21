@@ -57,9 +57,9 @@ function Profile() {
   }, [currentUser]);
 
   return (
+    <>
+    <Navbar />
     <div className="flex bg-beige w-full justify-center flex-col ">
-      <Navbar />
-      <button onClick={logout}>Logout</button>
       <div className=" bg-white mt-10 rounded-lg mx-72 pb-6 -mb-5">
         <div className="w-full bg-[url('./../public/images/profile.png')] bg-cover h-1/2 pt-48 pb-5">
           <div className="flex justify-center items-center rounded-full w-60 h-60 bg-beige ml-10 ">
@@ -374,6 +374,7 @@ function Profile() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
