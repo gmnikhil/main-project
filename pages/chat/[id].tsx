@@ -114,16 +114,16 @@ const MessagesPage = () => {
   }, [currentUser, recipient]);
 
   return (
-    <div className="bg-beige h-screen flex justify-center pt-10">
-      <div className="bg-white w-5/6 mb-10">
-        <div className="bg-off-white h-16 flex items-center ">
+    <div className="flex flex-col bg-beige items-center pt-10 h-screen">
+      <div className="bg-white w-5/6 mb-10 h-5/6 overflow-y-scroll">
+        <div className="bg-off-white h-16 flex items-center mb-5">
           <div className="bg-black rounded-3xl w-10 h-10 ml-5"></div>
           <p className="ml-3 font-josefin">
             {recipientData?.username || "Loading..."}
           </p>
         </div>
-        <h1>Messages</h1>
-        <div>
+        <div className="flex flex-col">
+        <div className="pb-10">
           <ul>
             {messages &&
               messages.map((msg, i) => {
@@ -132,19 +132,28 @@ const MessagesPage = () => {
                   msg.from == currentCompany?._id
                 )
                   return (
-                    <li key={i}>
-                      {currentUser.name}: {msg.body}
+                    <div className="flex justify-end mb-5">
+                    <li key={i} className=" mr-5 bg-peach max-w-xs rounded-lg p-2">
+                      {/* {currentUser.name}:*/} {msg.body} 
                     </li>
+                    <br />
+                    </div>
                   );
                 return (
-                  <li key={i}>
-                    {recipientData.name}: {msg.body}
+                  <div className="flex justify-start mb-5">
+                  <li key={i} className="bg-light-pink max-w-xs  rounded-lg p-2 ml-5" >
+                    {/* {recipientData.name}:*/} {msg.body} 
                   </li>
+                  <br />
+                  </div>
                 );
               })}
           </ul>
         </div>
-        <div className="absolute bottom-10 w-5/6 h-14 flex flex-row items-center bg-off-white overflow-hidden">
+       
+        </div>
+      </div>
+      <div className=" h-14 w-5/6 -mt-16 items-center bg-off-white ">
           <InputEmoji
             value={message}
             onChange={setMessage}
@@ -152,8 +161,7 @@ const MessagesPage = () => {
             placeholder="Type a message"
             onEnter={handleSendMessage}
           />
-        </div>
-      </div>
+        </div> 
     </div>
   );
 };
