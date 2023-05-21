@@ -91,14 +91,14 @@ function Post({ post }: { post: any }) {
               {this_post.creator.username}
             </p>
           </div>
-          <Button
+          {/* <Button
             color="dark"
             variant="subtle"
             leftIcon={<IconFriends />}
             className="text-sm rounded-3xl ml-80 mt-7 font-bold"
           >
             Connect
-          </Button>
+          </Button> */}
         </div>
         <div className="text-sm ml-5 mt-7">
           <p>{this_post.content}</p>
