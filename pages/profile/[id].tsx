@@ -158,13 +158,7 @@ function PublicProfile() {
 
             <p className="">
               {about ||
-                `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-            posuere sapien quis ante ultrices tempus. Ut et ante mauris. Proin
-            tincidunt finibus metus. Aliquam erat volutpat. Donec est odio,
-            suscipit id molestie vitae, ultricies eu nunc. Etiam turpis erat,
-            scelerisque vel ornare vel, bibendum a nisl. Duis sit amet dolor
-            nisl. Pellentesque vitae erat aliquam, elementum enim sed, dignissim
-            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.`}
+                `--Add ABout--`}
             </p>
           </div>
         </div>
@@ -176,13 +170,7 @@ function PublicProfile() {
 
             <p className="">
               {work_profile ||
-                `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-            posuere sapien quis ante ultrices tempus. Ut et ante mauris. Proin
-            tincidunt finibus metus. Aliquam erat volutpat. Donec est odio,
-            suscipit id molestie vitae, ultricies eu nunc. Etiam turpis erat,
-            scelerisque vel ornare vel, bibendum a nisl. Duis sit amet dolor
-            nisl. Pellentesque vitae erat aliquam, elementum enim sed, dignissim
-            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.`}
+                `--Add Career Details--`}
             </p>
           </div>
         </div>
@@ -194,13 +182,7 @@ function PublicProfile() {
 
             <p className="">
               {honours ||
-                `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-            posuere sapien quis ante ultrices tempus. Ut et ante mauris. Proin
-            tincidunt finibus metus. Aliquam erat volutpat. Donec est odio,
-            suscipit id molestie vitae, ultricies eu nunc. Etiam turpis erat,
-            scelerisque vel ornare vel, bibendum a nisl. Duis sit amet dolor
-            nisl. Pellentesque vitae erat aliquam, elementum enim sed, dignissim
-            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.`}
+                `--Add Honours--`}
             </p>
           </div>
         </div>
@@ -212,13 +194,7 @@ function PublicProfile() {
 
             <p className="">
               {education ||
-                `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-            posuere sapien quis ante ultrices tempus. Ut et ante mauris. Proin
-            tincidunt finibus metus. Aliquam erat volutpat. Donec est odio,
-            suscipit id molestie vitae, ultricies eu nunc. Etiam turpis erat,
-            scelerisque vel ornare vel, bibendum a nisl. Duis sit amet dolor
-            nisl. Pellentesque vitae erat aliquam, elementum enim sed, dignissim
-            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.`}
+                `--Add Education Details--`}
             </p>
           </div>
         </div>
@@ -230,13 +206,7 @@ function PublicProfile() {
 
             <p className="">
               {projects ||
-                `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-            posuere sapien quis ante ultrices tempus. Ut et ante mauris. Proin
-            tincidunt finibus metus. Aliquam erat volutpat. Donec est odio,
-            suscipit id molestie vitae, ultricies eu nunc. Etiam turpis erat,
-            scelerisque vel ornare vel, bibendum a nisl. Duis sit amet dolor
-            nisl. Pellentesque vitae erat aliquam, elementum enim sed, dignissim
-            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.`}
+                `--Add Projects--`}
             </p>
           </div>
         </div>
@@ -249,13 +219,7 @@ function PublicProfile() {
             <p className="">
               {skills?.length > 0
                 ? skills.join(", ")
-                : `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-            posuere sapien quis ante ultrices tempus. Ut et ante mauris. Proin
-            tincidunt finibus metus. Aliquam erat volutpat. Donec est odio,
-            suscipit id molestie vitae, ultricies eu nunc. Etiam turpis erat,
-            scelerisque vel ornare vel, bibendum a nisl. Duis sit amet dolor
-            nisl. Pellentesque vitae erat aliquam, elementum enim sed, dignissim
-            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.`}
+                : `--Add Your Skills--`}
             </p>
           </div>
         </div>
@@ -268,13 +232,7 @@ function PublicProfile() {
             <p className="">
               {interests?.length > 0
                 ? interests.join(", ")
-                : `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-            posuere sapien quis ante ultrices tempus. Ut et ante mauris. Proin
-            tincidunt finibus metus. Aliquam erat volutpat. Donec est odio,
-            suscipit id molestie vitae, ultricies eu nunc. Etiam turpis erat,
-            scelerisque vel ornare vel, bibendum a nisl. Duis sit amet dolor
-            nisl. Pellentesque vitae erat aliquam, elementum enim sed, dignissim
-            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.`}
+                : `--Add Your Interests--`}
             </p>
           </div>
         </div>
