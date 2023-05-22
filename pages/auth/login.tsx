@@ -28,6 +28,7 @@ function SignIn() {
   const { currentUser, handleUser, handleToken, handleUsername } =
     useContext(AuthContext);
 
+  
   async function loginUser(e: any) {
     e.preventDefault();
     requestHandler("POST", "/api/user/login", { username, password })
@@ -37,7 +38,11 @@ function SignIn() {
         handleToken(token);
         handleUsername(user.username);
       })
-      .catch((err: any) => console.log(err));
+      .catch((err: any) => {
+        console.log(err)
+        alert("Incorrect Username or Password");
+      });
+      
   }
 
   useEffect(() => {
