@@ -55,18 +55,25 @@ export default function ReportsPage() {
       let r: any = [];
       for (let i = 0; i < reportCount; i++) {
         r[i] = await (MainProjectContract as any).methods.reports(i).call();
+        console.log(r[i].job_id);
+        console.log(jobID);
         if (r[i].job_id != jobID) continue;
-
-        if (r[i].creatorType == "user") {
+        console.log("hey");
+        console.log(r[i].creatorType);
+        if (r[i].creatorType != "company") {
           await requestHandler(
             "POST",
             "/api/user/details",
             { user_id: r[i].creator_id },
             token
           )
-            .then((res: any) => (r[i].creator = res.data.user))
+            .then((res: any) => {
+              console.log(res);
+              r[i].creator = res.data.user;
+            })
             .catch((e: any) => {
-              throw new Error("Couldnt get user");
+              console.log(e);
+              throw Error("Couldnt get user");
             });
         } else {
           await requestHandler(
@@ -75,14 +82,18 @@ export default function ReportsPage() {
             { company_id: r[i].creator_id },
             token
           )
-            .then((res: any) => (r[i].creator = res.data.company))
+            .then((res: any) => {
+              //console.log(res.data);
+              r[i].creator = res.data.company;
+            })
             .catch((e: any) => {
-              throw new Error("Couldnt get company");
+              console.log(e);
+              throw Error("Couldnt get company");
             });
         }
       }
-      console.log(r);
-      r.filter((rep: any) => rep.job_id == jobID);
+      //console.log(r);
+      r = r.filter((rep: any) => rep.job_id == jobID);
       console.log(r);
       setReports(r as any);
     } catch (e) {

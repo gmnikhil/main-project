@@ -43,9 +43,8 @@ function Report({ report }: { report: any }) {
             }}
           ></div>
           <div className="mt-7 ml-3 font-josefin text-sm font-bold">
-            <Link href={"/profile/" + this_report.creator._id}>
-              <p>{this_report.creator.name}</p>
-            </Link>
+            <p>{this_report.creator.name}</p>
+
             <p className="text-xs text-gray-400 font-normal">
               {this_report.creator.name}
             </p>
