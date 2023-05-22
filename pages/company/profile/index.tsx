@@ -270,41 +270,10 @@ export default function CompanyProfile() {
             <p className="text-gray-500 text-sm">{email}</p>
             <SimpleGrid cols={7} spacing="xl" className="mt-7">
               <div>
-                <Menu shadow="md" width={200}>
-                  <Menu.Target>
-                    <Button
-                      onClick={() => {}}
-                      color="red"
-                      className="bg-red-500 text-md rounded-3xl "
-                    >
-                      Open To
-                    </Button>
-                  </Menu.Target>
-                  <Menu.Dropdown>
-                    <Menu.Item>
-                      <strong>Finding a new Job</strong>
-                      <br /> Show recruiters and others that you are open to
-                      work
-                    </Menu.Item>
-                    <Menu.Item>
-                      <strong>Hiring</strong>
-                      <br />
-                      Share that you are hiring and attract qualified candidates{" "}
-                    </Menu.Item>
-                    <Menu.Item>
-                      <strong>Mentoring</strong>
-                      <br />
-                      Showcase services you offer so that new clients can
-                      discover you{" "}
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
-              </div>
-              <div>
                 <Button
                   color="gray"
-                  variant="outline"
-                  className="text-md ml-16 rounded-3xl "
+                  variant="filled"
+                  className="text-md rounded-3xl bg-black"
                   onClick={() => {
                     router.push(`/company/profile/${currentCompany._id}`);
                   }}
@@ -321,10 +290,7 @@ export default function CompanyProfile() {
               About
             </Title>
 
-            <p className="">
-              {about ||
-                `--Add About--`}
-            </p>
+            <p className="">{about || `--Add About--`}</p>
           </div>
         </div>
         <div className="bg-white mt-10 rounded-lg mx-72 pb-6  -mb-5">
@@ -333,10 +299,7 @@ export default function CompanyProfile() {
               Work
             </Title>
 
-            <p className="">
-              {work ||
-                `--Add Work Details--`}
-            </p>
+            <p className="">{work || `--Add Work Details--`}</p>
           </div>
         </div>
         <div className="bg-white mt-10 rounded-lg mx-72 pb-6  -mb-5">
@@ -345,10 +308,7 @@ export default function CompanyProfile() {
               Environment
             </Title>
 
-            <p className="">
-              {environment ||
-                `--Add Environment Details--`}
-            </p>
+            <p className="">{environment || `--Add Environment Details--`}</p>
           </div>
         </div>
       </div>

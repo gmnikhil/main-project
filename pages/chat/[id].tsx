@@ -216,9 +216,11 @@ const MessagesPage = () => {
               })`,
             }}
           ></div>
-          <p className="ml-3 font-josefin">
-            {recipientData?.username || "Loading..."}
-          </p>
+          <Link href={"/profile/" + recipientData._id}>
+            <p className="ml-3 font-josefin">
+              {recipientData?.username || "Loading..."}
+            </p>
+          </Link>
         </div>
         <div className="flex flex-col">
           <div className="pb-10">

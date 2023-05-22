@@ -57,7 +57,13 @@ function jobdesc() {
   return (
     <div className="bg-white flex flex-row h-screen">
       <div className=" bg-white w-1/3 flex justify-center items-center flex-col overflow-hidden">
-        <Image src={camera} alt="company logo" className="w-20 h-20 " />
+        <Image
+          src={job.company.avatar}
+          height={80}
+          width={80}
+          alt="company logo"
+          className="w-20 h-20 rounded-full"
+        />
         <div className="mt-5 flex flex-col items-center">
           <p className="font-josefin text-3xl text-red-700 ">
             {job.company.name}
@@ -65,9 +71,9 @@ function jobdesc() {
           <p className="font-josefin text-2xl mt-2">{job.company.email}</p>
           {/* <p className="font-josefin text-lg mt-1">Uploaded 19 minutes ago</p> */}
 
-          <Button variant="outline" color="blue" className="mt-7">
+          {/* <Button variant="outline" color="blue" className="mt-7">
             Follow
-          </Button>
+          </Button> */}
           <Link href={"/jobs/reports/" + jobID}>
             <Button variant="filled" color="red" className="mt-7 bg-red-400">
               View Reports
