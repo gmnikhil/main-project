@@ -1,6 +1,6 @@
 import Image from "next/image";
 import camera from "../../public/images/camera.png";
-import { Menu, Button } from "@mantine/core";
+import { Menu, Button, Badge } from "@mantine/core";
 import { SimpleGrid } from "@mantine/core";
 import { Title } from "@mantine/core";
 import { IconMessageForward, IconBookDownload } from "@tabler/icons-react";
@@ -14,7 +14,8 @@ import { toast } from "react-toastify";
 function PublicProfile() {
   const router = useRouter();
 
-  const { currentUser, token, handleUserLogout } = useContext(AuthContext);
+  const { currentUser, token, handleUserLogout, currentCompany } =
+    useContext(AuthContext);
 
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
@@ -35,6 +36,8 @@ function PublicProfile() {
   const [about, setAbout] = useState();
   const [avatar, setAvatar] = useState();
   const [banner, setBanner] = useState();
+  const [mentorship, setMentorship] = useState<any>();
+  const [following, setFollowing] = useState(false);
 
   // const logout = () => {
   //   handleUserLogout();
@@ -75,20 +78,85 @@ function PublicProfile() {
         update(res.data.user);
       })
       .catch((err: any) => console.log(err));
+
+    requestHandler(
+      "GET",
+      "/api/mentorship?mentor=" + router.query.id,
+      {},
+      token
+    )
+      .then((res: any) => {
+        if (res.data.requests.length) setMentorship(res.data.requests[0]);
+      })
+      .catch((e: any) => {
+        console.log(e);
+        toast.error("Something went wrong!");
+      });
+  };
+
+  const getFollowing = async () => {
+    requestHandler(
+      "GET",
+      "/api/feed/follow?entity=" +
+        router.query.id +
+        "&&follower=" +
+        currentUser._id,
+      {},
+      token
+    )
+      .then((res: any) => {
+        console.log(res);
+        if (res.data.fdocs.length) setFollowing(true);
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  };
+
+  const handleFollow = () => {
+    if (!following) {
+      requestHandler(
+        "POST",
+        "/api/feed/follow",
+        {
+          entity: router.query.id,
+          follower: currentUser ? currentUser._id : currentCompany._id,
+        },
+        token
+      )
+        .then((res: any) => {
+          setFollowing(true);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
+    } else {
+      requestHandler(
+        "DELETE",
+        `/api/feed/follow?entity=${router.query.id}&&follower=${
+          currentUser ? currentUser._id : currentCompany._id
+        }`,
+        {},
+        token
+      )
+        .then((res: any) => {
+          setFollowing(false);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
+    }
   };
 
   useEffect(() => {
     if (!token || !router.query.id) return;
     getProfile();
+    getFollowing();
   }, [token, router]);
-
-  useEffect(() => {
-    if (!currentUser) router.push("/auth/login");
-  }, [currentUser]);
 
   return (
     <>
-      <Navbar />
+      {(currentUser || currentCompany) && <Navbar />}
       <div className="flex bg-beige w-full justify-center flex-col ">
         <div className=" bg-white mt-10 rounded-lg mx-72 pb-6 -mb-5">
           <div
@@ -113,39 +181,41 @@ function PublicProfile() {
 
           <div className="ml-10 mt-10">
             <p className="font-bold text-3xl font-josefin">{name}</p>
-            <p className="text-lg">{username}</p>
-            <p className="text-gray-500 text-sm">{email}</p>
-            <SimpleGrid cols={7} spacing="xl" className="mt-7">
+            <div className="flex gap-8 items-center">
               <div>
-                <Menu shadow="md" width={200}>
-                  <Menu.Target>
-                    <Button
-                      onClick={() => {}}
-                      color="red"
-                      className="bg-red-500 text-md rounded-3xl "
-                    >
-                      Open To
-                    </Button>
-                  </Menu.Target>
-                  <Menu.Dropdown>
-                    <Menu.Item>
-                      <strong>Finding a new Job</strong>
-                      <br /> Show recruiters and others that you are open to
-                      work
-                    </Menu.Item>
-                    <Menu.Item>
-                      <strong>Hiring</strong>
-                      <br />
-                      Share that you are hiring and attract qualified candidates{" "}
-                    </Menu.Item>
-                    <Menu.Item>
-                      <strong>Mentoring</strong>
-                      <br />
-                      Showcase services you offer so that new clients can
-                      discover you{" "}
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
+                <p className="text-lg">{username}</p>
+                <p className="text-gray-500 text-sm">{email}</p>
+              </div>
+              <div>
+                {mentorship?.status === "progress" && (
+                  <Badge color="grape" variant="filled">
+                    Mentoring
+                  </Badge>
+                )}
+                {mentorship?.status === "pending" && (
+                  <Badge color="cyan" variant="filled">
+                    Open to Mentoring
+                  </Badge>
+                )}
+                {following && (
+                  <Badge color="lime" variant="filled">
+                    following
+                  </Badge>
+                )}
+              </div>
+            </div>
+            <SimpleGrid cols={12} spacing="xl" className="mt-7">
+              <div>
+                <Button
+                  color="orange"
+                  variant={following ? "filled" : "outline"}
+                  className={`text-md rounded-3xl ${
+                    following ? "bg-orange-500" : ""
+                  }`}
+                  onClick={handleFollow}
+                >
+                  {following ? "Unfollow" : "Follow"}
+                </Button>
               </div>
             </SimpleGrid>
           </div>

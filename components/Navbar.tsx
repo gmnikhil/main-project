@@ -5,31 +5,16 @@ import { AuthContext } from "../context/authContext";
 import { useRouter } from "next/router";
 import { Text, useMantineTheme } from "@mantine/core";
 
-function Navbar() {
+function Navbar({ className }: { className?: string }) {
   const router = useRouter();
   const theme = useMantineTheme();
 
   const { currentUser, currentCompany, handleCompanyLogout, handleUserLogout } =
     useContext(AuthContext);
 
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-
-  // useEffect(() => {
-  //   if (!token) return;
-  //   requestHandler("GET", "/api/user/profile", {}, token)
-  //     .then((res: any) => {
-  //       setName(res.data.user.name);
-  //       setEmail(res.data.user.email);
-  //       setUsername(res.data.user.username);
-  //     })
-  //     .catch((err: any) => console.log(err));
-  // }, [token]);
-
-  // useEffect(() => {
-  //   if (!currentUser) router.push("/auth/login");
-  // }, [currentUser]);
+  useEffect(() => {
+    if (!currentUser && !currentCompany) router.push("/auth/login");
+  }, [currentUser]);
 
   const logout = () => {
     if (currentUser) {
@@ -42,7 +27,9 @@ function Navbar() {
   };
 
   return (
-    <div className="flex flex-row justify-between font-fredoka text-lg">
+    <div
+      className={`flex flex-row justify-between font-fredoka text-lg ${className}`}
+    >
       <div className="ml-5">
         <nav>
           <ul>
@@ -55,9 +42,17 @@ function Navbar() {
             <Link href="/jobs" className="ml-4">
               Job
             </Link>
+            <Link href="/feed" className="ml-4">
+              Feed
+            </Link>
             <Link href="/predict" className="ml-4">
               Predict
             </Link>
+            {currentUser && (
+              <Link href="/mentoring" className="ml-4">
+                Mentoring
+              </Link>
+            )}
             <button className="ml-5" onClick={logout}>
               Logout
             </button>

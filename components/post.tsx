@@ -13,6 +13,7 @@ import requestHandler from "../utils/requestHandler";
 import { AuthContext } from "../context/authContext";
 import { toast } from "react-toastify";
 import CommentModal from "../pages/feed/modals/commentModal";
+import Link from "next/link";
 
 function Post({ post }: { post: any }) {
   const [this_post, setThisPost] = useState(post);
@@ -84,13 +85,25 @@ function Post({ post }: { post: any }) {
         style={{ width: "600px" }}
       >
         <div className="flex flex-row">
-          <div className="flex justify-center rounded-full !w-14 !h-14 bg-off-white mt-5 ml-5"></div>
+          <div
+            className="flex justify-center bg-cover bg-center rounded-full !w-14 !h-14 bg-off-white mt-5 ml-5"
+            style={{
+              backgroundImage: `url(${
+                this_post?.creator?.avatar
+                  ? this_post.creator.avatar
+                  : "https://picsum.photos/1400"
+              })`,
+            }}
+          ></div>
           <div className="mt-7 ml-3 font-josefin text-sm font-bold">
-            <p>{this_post.creator.name}</p>
+            <Link href={"/profile/" + this_post.creator._id}>
+              <p>{this_post.creator.name}</p>
+            </Link>
             <p className="text-xs text-gray-400 font-normal">
               {this_post.creator.username}
             </p>
           </div>
+
           {/* <Button
             color="dark"
             variant="subtle"
@@ -103,23 +116,25 @@ function Post({ post }: { post: any }) {
         <div className="text-sm ml-5 mt-7">
           <p>{this_post.content}</p>
         </div>
-        <div
-          style={{
-            width: "100%",
-            aspectRatio: "1 / 1",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Image
-            src={this_post.image || signin}
-            alt="camera image"
-            width={1000}
-            height={500}
-            //style={{ height: "100%", width: "100%", objectFit: "cover" }}
-          />
-        </div>
+        {this_post.image && (
+          <div
+            style={{
+              width: "100%",
+              aspectRatio: "1 / 1",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Image
+              src={this_post.image || signin}
+              alt="camera image"
+              width={1000}
+              height={500}
+              //style={{ height: "100%", width: "100%", objectFit: "cover" }}
+            />
+          </div>
+        )}
         <div className="flex flex-row ">
           <Button
             color="dark"
@@ -143,22 +158,14 @@ function Post({ post }: { post: any }) {
           >
             Comment
           </Button>
-          <Button
-            color="dark"
-            variant="subtle"
-            leftIcon={<IconArrowForward />}
-            className="text-sm rounded-3xl ml-8 mt-3 mb-3 font-bold"
-          >
-            Repost
-          </Button>
-          <Button
+          {/* <Button
             color="dark"
             variant="subtle"
             leftIcon={<IconSend />}
             className="text-sm rounded-3xl mt-3 ml-8 mb-3 font-bold"
           >
             Send
-          </Button>
+          </Button> */}
         </div>
       </div>
     </>

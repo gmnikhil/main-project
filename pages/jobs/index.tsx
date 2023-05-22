@@ -6,12 +6,13 @@ import { toast } from "react-toastify";
 import requestHandler from "../../utils/requestHandler";
 import { AuthContext } from "../../context/authContext";
 import Navbar from "../../components/Navbar";
+import { Button } from "@mantine/core";
 
 function Job() {
   const [jobs, setJobs] = useState([]);
   const [add_job_modal_opened, setAddJobModalOpened] = useState(false);
   const { acc, MainProjectContract, loading } = useWalletDetails();
-  const { token } = useContext(AuthContext);
+  const { token, currentCompany } = useContext(AuthContext);
 
   const handleCloseJobAddModal = () => {
     setAddJobModalOpened(false);
@@ -53,21 +54,29 @@ function Job() {
   }, [acc]);
   return (
     <>
-      <AddJobModal
-        handleClose={handleCloseJobAddModal}
-        handleUpdate={handleJobPosted}
-        open={add_job_modal_opened}
-      />
-      <Navbar />
-      <button
-        onClick={() => {
-          setAddJobModalOpened(true);
-        }}
-      >
-        Add Job
-      </button>
-      <div className="flex bg-off-white h-screen p-5 justify-center ">
-        <div className=" bg-white rounded-xl border-solid border-gray-300 border w-1/3 pt-10">
+      {currentCompany && (
+        <AddJobModal
+          handleClose={handleCloseJobAddModal}
+          handleUpdate={handleJobPosted}
+          open={add_job_modal_opened}
+        />
+      )}
+      {/* <Navbar /> */}
+
+      <div className="flex flex-col bg-off-white h-screen p-5 items-center ">
+        {currentCompany && (
+          <Button
+            variant="filled"
+            color="blue"
+            className="bg-blue-400 my-8 w-32"
+            onClick={() => {
+              setAddJobModalOpened(true);
+            }}
+          >
+            Add Job
+          </Button>
+        )}
+        <div className=" bg-white rounded-xl border-solid border-gray-300 border w-3/5 pt-10">
           {jobs &&
             jobs.map((j: any, i: any) => {
               console.log(j);

@@ -29,7 +29,7 @@ export default async function handler(req, res) {
         delete req.body.username;
         delete req.body.password;
 
-        console.log(_id);
+        console.log(req.body);
 
         const updated_user = await User.findOneAndUpdate(
           _id,

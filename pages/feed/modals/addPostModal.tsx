@@ -110,7 +110,9 @@ export default function AddPostModal({
 
         <div className="mt-4 flex justify-end ">
           <Button
-            className="text-white bg-baseColor"
+            color="blue"
+            variant="filled"
+            className="text-white bg-blue-400"
             disabled={!post_content}
             onClick={() => {
               handleUpload();

@@ -155,9 +155,9 @@ export default function CompanyProfile() {
       .catch((err: any) => console.log(err));
   }, [token]);
 
-  useEffect(() => {
-    if (!currentCompany) router.push("/company/login");
-  }, [currentCompany]);
+  // useEffect(() => {
+  //   if (!currentCompany) router.push("/company/login");
+  // }, [currentCompany]);
 
   return (
     <>

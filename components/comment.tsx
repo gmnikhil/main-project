@@ -12,7 +12,7 @@ export default function Comment({
   return (
     <div className={`flex flex-col ${sent ? "items-end" : ""}`}>
       <div className="flex items-center mt-5 ml-3">
-        <Avatar color="blue" radius="xl">
+        <Avatar color="blue" radius="xl" src={sent_by.avatar}>
           {/* <BiStar size={20} /> */}
         </Avatar>
         <div className="flex items-end">

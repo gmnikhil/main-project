@@ -12,6 +12,8 @@ import {
   MultiSelect,
   NativeSelect,
   Textarea,
+  Chip,
+  Badge,
 } from "@mantine/core";
 import { SimpleGrid } from "@mantine/core";
 import { Space } from "@mantine/core";
@@ -32,6 +34,7 @@ function Profile() {
   const [opened2, handlers2] = useDisclosure(false);
   const [opened3, handlers3] = useDisclosure(false);
   const [opened4, handlers4] = useDisclosure(false);
+  const [opened5, handlers5] = useDisclosure(false);
 
   const { currentUser, token, handleUserLogout } = useContext(AuthContext);
 
@@ -54,6 +57,10 @@ function Profile() {
   const [about, setAbout] = useState();
   const [avatar, setAvatar] = useState();
   const [banner, setBanner] = useState();
+  const [mentorship, setMentorship] = useState<any>();
+  const [date_time, setDateTime] = useState();
+  const [seeking, setSeeking] = useState("false");
+  const [hiring, setHiring] = useState("false");
 
   // console.log(currentUser._id);
 
@@ -148,6 +155,8 @@ function Profile() {
     setAbout(user.about);
     setAvatar(user.avatar);
     setBanner(user.banner);
+    setHiring(user.hiring);
+    setSeeking(user.seeking);
   };
 
   const handleSectionSubmit = async () => {
@@ -168,6 +177,48 @@ function Profile() {
         honours,
         projects,
         work_profile,
+      },
+      token
+    )
+      .then((res: any) => {
+        console.log(res);
+        update(res.data.user);
+        handlers2.close();
+      })
+      .catch((err: any) => {
+        console.log(err);
+        toast.error("Could not update!");
+      });
+  };
+
+  const handleHiring = async () => {
+    let bool = hiring === "true" ? false : true;
+    requestHandler(
+      "PATCH",
+      "/api/user/profile",
+      {
+        hiring: bool,
+      },
+      token
+    )
+      .then((res: any) => {
+        console.log(res);
+        update(res.data.user);
+        handlers2.close();
+      })
+      .catch((err: any) => {
+        console.log(err);
+        toast.error("Could not update!");
+      });
+  };
+
+  const handleSeeking = async () => {
+    let bool = seeking === "true" ? false : true;
+    requestHandler(
+      "PATCH",
+      "/api/user/profile",
+      {
+        seeking: bool,
       },
       token
     )
@@ -227,12 +278,61 @@ function Profile() {
       });
   };
 
+  const handleMentoring = async () => {
+    if (!mentorship) {
+      requestHandler(
+        "POST",
+        "/api/mentorship",
+        { mentor: currentUser._id, date_time },
+        token
+      )
+        .then((res: any) => {
+          setMentorship(res.data.requests[0]);
+          handlers5.close();
+        })
+        .catch((e: any) => {
+          console.log(e);
+          toast.error("Something went wrong!");
+        });
+    } else {
+      requestHandler(
+        "DELETE",
+        "/api/mentorship?mentor=" + currentUser._id,
+        {},
+        token
+      )
+        .then((res: any) => {
+          setMentorship(res.data.requests[0]);
+          handlers5.close();
+        })
+        .catch((e: any) => {
+          console.log(e);
+          toast.error("Something went wrong!");
+        });
+      setMentorship(undefined);
+    }
+  };
+
   const getProfile = async () => {
     requestHandler("GET", "/api/user/profile", {}, token)
       .then((res: any) => {
         update(res.data.user);
       })
       .catch((err: any) => console.log(err));
+
+    requestHandler(
+      "GET",
+      "/api/mentorship?mentor=" + currentUser._id,
+      {},
+      token
+    )
+      .then((res: any) => {
+        if (res.data.requests.length) setMentorship(res.data.requests[0]);
+      })
+      .catch((e: any) => {
+        console.log(e);
+        toast.error("Something went wrong!");
+      });
   };
 
   useEffect(() => {
@@ -247,6 +347,24 @@ function Profile() {
   return (
     <>
       <Navbar />
+      <Modal
+        className="mt-20"
+        opened={opened5}
+        onClose={handlers5.close}
+        title="Mentor"
+        closeOnClickOutside={false}
+      >
+        <TextInput
+          type="time"
+          value={date_time}
+          onChange={(e: any) => setDateTime(e.target.value)}
+        />
+        <div className="flex justify-center">
+          <Button className="bg-green-500 mt-8" onClick={handleMentoring}>
+            Confirm
+          </Button>
+        </div>
+      </Modal>
       <div className="flex bg-beige w-full justify-center flex-col ">
         <div className=" bg-white mt-10 rounded-lg mx-72 pb-6 -mb-5">
           <div
@@ -429,11 +547,37 @@ function Profile() {
           </div>
           <div className="ml-10 ">
             <p className="font-bold text-3xl font-josefin">{name}</p>
-            <p className="text-lg">{username}</p>
-            <p className="text-gray-500 text-sm">{email}</p>
+            <div className="flex gap-8 items-center">
+              <div>
+                <p className="text-lg">{username}</p>
+                <p className="text-gray-500 text-sm">{email}</p>
+              </div>
+              <div className="flex gap-4">
+                {mentorship?.status === "progress" && (
+                  <Badge color="grape" variant="filled">
+                    Mentoring
+                  </Badge>
+                )}
+                {mentorship?.status === "pending" && (
+                  <Badge color="cyan" variant="filled">
+                    Open to Mentoring
+                  </Badge>
+                )}
+                {hiring === "true" && (
+                  <Badge color="green" variant="filled">
+                    Hiring
+                  </Badge>
+                )}
+                {seeking === "true" && (
+                  <Badge color="cyan" variant="filled">
+                    Seeking Job
+                  </Badge>
+                )}
+              </div>
+            </div>
             <SimpleGrid cols={9} spacing="xs" className="mt-7">
               <div>
-                <Menu shadow="md" width={200}>
+                <Menu shadow="md" width={200} closeOnItemClick={false}>
                   <Menu.Target>
                     <Button
                       color="red"
@@ -443,17 +587,38 @@ function Profile() {
                     </Button>
                   </Menu.Target>
                   <Menu.Dropdown>
-                    <Menu.Item>
+                    <Menu.Item
+                      onClick={handleSeeking}
+                      className={`${
+                        seeking === "true"
+                          ? "bg-blue-500 text-white hover:bg-blue-500"
+                          : ""
+                      }`}
+                    >
                       <strong>Finding a new Job</strong>
                       <br /> Show recruiters and others that you are open to
                       work
                     </Menu.Item>
-                    <Menu.Item>
+                    <Menu.Item
+                      onClick={handleHiring}
+                      className={`${
+                        hiring === "true"
+                          ? "bg-yellow-500 text-white hover:bg-yellow-500"
+                          : ""
+                      }`}
+                    >
                       <strong>Hiring</strong>
                       <br />
                       Share that you are hiring and attract qualified candidates{" "}
                     </Menu.Item>
-                    <Menu.Item>
+                    <Menu.Item
+                      onClick={mentorship ? handleMentoring : handlers5.open}
+                      className={`${
+                        mentorship
+                          ? "bg-green-500 text-white hover:bg-green-500"
+                          : ""
+                      }`}
+                    >
                       <strong>Mentoring</strong>
                       <br />
                       Showcase services you offer so that new clients can

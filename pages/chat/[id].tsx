@@ -4,6 +4,10 @@ import { io } from "socket.io-client";
 import { AuthContext } from "../../context/authContext";
 import InputEmoji from "react-input-emoji";
 import requestHandler from "../../utils/requestHandler";
+import { toast } from "react-toastify";
+import Navbar from "../../components/Navbar";
+import { Paper, Text } from "@mantine/core";
+import Link from "next/link";
 
 /*Currently only users can chat between each other */
 
@@ -15,6 +19,9 @@ const MessagesPage = () => {
   const [recipient, setRecipient] = useState<any>();
   const { currentUser, token, currentCompany } = useContext(AuthContext);
   const [recipientData, setRecipientData] = useState<any>();
+  const [mentorship, setMentorship] = useState<any>();
+  const [showChat, setShowChat] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   async function initSocket() {
     if (socket) socket.disconnect();
@@ -90,6 +97,48 @@ const MessagesPage = () => {
       });
   };
 
+  async function checkMentorship() {
+    await requestHandler(
+      "GET",
+      "/api/mentorship?status=progress&&mentee=" +
+        currentUser._id +
+        "&&mentor=" +
+        router.query.id,
+      {},
+      token
+    )
+      .then((res: any) => {
+        if (res.data.requests.length) {
+          setMentorship(res.data.requests[0]);
+        }
+      })
+      .catch((e: any) => {
+        console.log(e);
+        toast.error("Something went wrong!");
+      });
+
+    await requestHandler(
+      "GET",
+      "/api/mentorship?status=progress&&mentee=" +
+        router.query.id +
+        "&&mentor=" +
+        currentUser._id,
+      {},
+      token
+    )
+      .then((res: any) => {
+        if (res.data.requests.length) {
+          setMentorship(res.data.requests[0]);
+        }
+      })
+      .catch((e: any) => {
+        console.log(e);
+        toast.error("Something went wrong!");
+      });
+
+    setLoading(false);
+  }
+
   useEffect(() => {
     if (!currentUser && !currentCompany) router.push("/auth/login");
   }, [currentUser, currentCompany]);
@@ -104,6 +153,7 @@ const MessagesPage = () => {
     if (currentUser && recipient) {
       initSocket();
       getRecepientAndMessages();
+      checkMentorship();
     }
     return () => {
       if (socket) {
@@ -112,6 +162,45 @@ const MessagesPage = () => {
       }
     };
   }, [currentUser, recipient]);
+
+  useEffect(() => {
+    if (!mentorship?.date_time) return;
+
+    const targetTime = new Date();
+    const [hours, minutes] = mentorship.date_time.split(":");
+
+    targetTime.setHours(hours);
+    targetTime.setMinutes(minutes);
+    targetTime.setSeconds(0);
+    targetTime.setMilliseconds(0);
+
+    const currentTime = new Date();
+    console.log(currentTime - targetTime);
+    // Check if current time is less than half past the target time
+    if (currentTime - targetTime < 1800 && currentTime - targetTime >= 0) {
+      console.log(currentTime - targetTime);
+      setShowChat(true);
+      return;
+    }
+
+    router.push("/mentoring");
+  }, [mentorship]);
+
+  if (loading)
+    return (
+      <>
+        <Navbar />
+        <h1>Loading...</h1>
+      </>
+    );
+
+  if (mentorship && !showChat)
+    return (
+      <>
+        <Navbar />
+        <Link href="/mentoring">Go to mentoring</Link>
+      </>
+    );
 
   return (
     <div className="flex flex-col bg-beige items-center pt-10 h-screen">

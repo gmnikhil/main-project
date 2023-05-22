@@ -4,6 +4,7 @@ import User from "../models/user";
 import Company from "../models/company";
 import Post from "../models/post";
 import Like from "../models/like";
+import Follow from "../models/follow";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -21,9 +22,44 @@ export default async function handler(req, res) {
         } else {
           creator = x.user._id;
         }
-        const posts = await Post.find({}).exec();
+        const posts = [];
+        const following = await Follow.find(req.query).exec();
+        for (let i = 0; i < following.length; i++) {
+          let f = following[i];
+          const p = await Post.find({ creator: f.entity })
+            .sort({ createdAt: -1 })
+            .exec();
+          const populatedPosts = await Promise.all(
+            p.map(async (post) => {
+              if (post.creatorType === "user") {
+                const user = await User.findById(post.creator).lean().exec();
+                const liked = await Like.findOne({
+                  liker: creator,
+                  post_id: post._id,
+                })
+                  .lean()
+                  .exec();
+                return { ...post._doc, creator: user, liked: !!liked };
+              } else {
+                const company = await Company.findById(post.creator)
+                  .lean()
+                  .exec();
+                const liked = await Like.findOne({
+                  liker: creator,
+                  post_id: post._id,
+                })
+                  .lean()
+                  .exec();
+                return { ...post._doc, creator: company, liked: !!liked };
+              }
+            })
+          );
+          posts.push(populatedPosts);
+        }
+
+        const p = await Post.find({ creator }).sort({ createdAt: -1 }).exec();
         const populatedPosts = await Promise.all(
-          posts.map(async (post) => {
+          p.map(async (post) => {
             if (post.creatorType === "user") {
               const user = await User.findById(post.creator).lean().exec();
               const liked = await Like.findOne({
@@ -47,8 +83,10 @@ export default async function handler(req, res) {
             }
           })
         );
-        //console.log(populatedPosts);
-        res.status(201).json({ success: true, posts: populatedPosts });
+        posts.push(populatedPosts);
+
+        const flattened = posts.flat();
+        res.status(201).json({ success: true, posts: flattened });
       } catch (error) {
         console.log(error);
         res.status(400).json({ success: false });

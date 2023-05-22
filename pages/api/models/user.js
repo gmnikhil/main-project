@@ -66,6 +66,12 @@ const userSchema = new mongoose.Schema({
   work_profile: {
     type: String,
   },
+  hiring: {
+    type: String,
+  },
+  seeking: {
+    type: String,
+  },
 });
 
 export default mongoose.models.User || mongoose.model("User", userSchema);

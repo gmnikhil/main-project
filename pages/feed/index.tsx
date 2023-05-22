@@ -2,7 +2,7 @@ import Post from "../../components/post";
 
 import {
   createStyles,
-  Navbar,
+  Navbar as Sidebar,
   TextInput,
   Code,
   UnstyledButton,
@@ -13,6 +13,7 @@ import {
   Tooltip,
   Title,
   Divider,
+  Button,
 } from "@mantine/core";
 import {
   IconBulb,
@@ -32,10 +33,12 @@ import AddPostModal from "./modals/addPostModal";
 import Link from "next/link";
 import requestHandler from "../../utils/requestHandler";
 import { AuthContext } from "../../context/authContext";
+import Navbar from "../../components/Navbar";
 
 const useStyles = createStyles((theme) => ({
   navbar: {
     paddingTop: 0,
+    zIndex: 0,
   },
 
   section: {
@@ -136,10 +139,9 @@ const links = [
   { icon: IconUserSearch, label: "Connect With Others" },
   { icon: IconFileSearch, label: "Job Search" },
   { icon: IconBook, label: "Mentoring" },
-  { icon: IconSettings, label: "Settings" },
 ];
 
-export function NavbarSearch() {
+export function SidebarSearch() {
   const { classes } = useStyles();
   const [post_upload_modal_opened, setPostUploadModalOpened] =
     useState<boolean>(false);
@@ -147,6 +149,8 @@ export function NavbarSearch() {
   const [posts, setPosts] = useState<any>([]);
 
   const { currentUser, token, currentCompany } = useContext(AuthContext);
+
+  const [user, setUser] = useState<any>();
 
   const mainLinks = links.map((link) => (
     <UnstyledButton key={link.label} className={classes.mainLink}>
@@ -172,12 +176,41 @@ export function NavbarSearch() {
       });
   }
 
+  const getProfile = async () => {
+    if (currentUser)
+      requestHandler(
+        "POST",
+        "/api/user/details",
+        { user_id: currentUser._id },
+        token
+      )
+        .then((res: any) => {
+          setUser(res.data.user);
+        })
+        .catch((err: any) => console.log(err));
+    else
+      requestHandler(
+        "POST",
+        "/api/company/details",
+        { company_id: currentCompany._id },
+        token
+      )
+        .then((res: any) => {
+          setUser(res.data.company);
+        })
+        .catch((err: any) => console.log(err));
+  };
+
   useEffect(() => {
-    if (token) fetchPosts();
+    if (token) {
+      getProfile();
+      fetchPosts();
+    }
   }, [token]);
 
   return (
     <>
+      <Navbar className="fixed w-full bg-white" />
       {post_upload_modal_opened && (
         <AddPostModal
           open={post_upload_modal_opened}
@@ -185,49 +218,59 @@ export function NavbarSearch() {
           handleUpdate={fetchPosts}
         />
       )}
-      <div className="flex flex-row bg-beige">
-        <Navbar
-          width={{ sm: 300 }}
-          p="md"
-          className={classes.navbar + " fixed"}
-        >
-          <Navbar.Section className="flex justify-center">
-            <div className="flex justify-center rounded-full w-40 h-40 bg-off-white mt-10 mb-8"></div>
-          </Navbar.Section>
-          <Navbar.Section className="flex justify-center">
-            <Title order={2} className=" font-josefin">
-              {" "}
-              Hello Name
-            </Title>
-          </Navbar.Section>
-          <Navbar.Section className="flex justify-center -mt-1 text-sm mb-5 text-red-600">
-            <Link href="./profile">View Profile</Link>
-          </Navbar.Section>
-          <Divider className="mb-10" />
+      <Sidebar
+        width={{ sm: 300 }}
+        p="md"
+        className={classes.navbar + " fixed"}
+        style={{ height: "95%" }}
+      >
+        <Sidebar.Section className="flex justify-center">
+          <div
+            className="flex bg-cover bg-center justify-center rounded-full w-40 h-40 bg-off-white mt-10 mb-8"
+            style={{
+              backgroundImage: `url(${
+                user ? user.avatar : "https://picsum.photos/1400"
+              })`,
+            }}
+          ></div>
+        </Sidebar.Section>
+        <Sidebar.Section className="flex justify-center">
+          <Title order={2} className=" font-josefin">
+            {" "}
+            {user ? user.name : "Loading..."}
+          </Title>
+        </Sidebar.Section>
+        <Sidebar.Section className="flex justify-center -mt-1 text-sm mb-5 text-red-600">
+          <Link href="/profile">View Profile</Link>
+        </Sidebar.Section>
+        <Divider className="mb-10" />
 
-          <TextInput
-            placeholder="Search"
-            size="xs"
-            icon={<IconSearch size="0.8rem" stroke={1.5} />}
-            rightSectionWidth={70}
-            styles={{ rightSection: { pointerEvents: "none" } }}
-            mb="sm"
-          />
-
-          <Navbar.Section className={classes.section}>
-            <div className={classes.mainLinks}>{mainLinks}</div>
-          </Navbar.Section>
-        </Navbar>
-
-        <div className={"flex flex-col w-full items-center"}>
-          <button
-            className="my-6"
+        <TextInput
+          placeholder="Search"
+          size="xs"
+          icon={<IconSearch size="0.8rem" stroke={1.5} />}
+          rightSectionWidth={70}
+          styles={{ rightSection: { pointerEvents: "none" } }}
+          mb="sm"
+        />
+        <Sidebar.Section className={classes.section + " flex justify-center"}>
+          <Button
+            className="mt-10 mb-3 bg-blue-400"
+            variant="filled"
+            color="blue"
             onClick={() => {
               setPostUploadModalOpened(true);
             }}
           >
             Create Post
-          </button>
+          </Button>
+        </Sidebar.Section>
+        {/* <Sidebar.Section className={classes.section}>
+          <div className={classes.mainLinks}>{mainLinks}</div>
+        </Sidebar.Section> */}
+      </Sidebar>
+      <div className="flex flex-row bg-beige -z-30">
+        <div className={"flex flex-col w-full items-center"}>
           {posts &&
             posts.map((post: any, i: any) => {
               return <Post post={post} />;
@@ -237,4 +280,4 @@ export function NavbarSearch() {
     </>
   );
 }
-export default NavbarSearch;
+export default SidebarSearch;
