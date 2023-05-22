@@ -20,7 +20,7 @@ function Jobpost({ job }: { job: any }) {
             {job.title} at {job.company?.name || ""}
           </p>
         </Link>
-        <p>{job.company_id}</p>
+        <p>{job.requirements}</p>
         <p>{job.description}</p>
         <p>{job.eligibility}</p>
         <Divider my="lg" />

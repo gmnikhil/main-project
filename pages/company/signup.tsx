@@ -44,61 +44,60 @@ function signUp() {
 
   return (
     <>
-    <Navbarlogin />
-    <div className=" h-fixed">
-      <div className="flex flex-row justify-between overflow-y-hidden">
-        
-        <div className="flex flex-col pl-44 mt-12">
-          <p className="mt-10  font-fredoka text-5xl text-peach">Sign Up</p>
-          <form className="flex flex-col">
-            <input
-              type={"text"}
-              placeholder="Name"
-              name="name"
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-              className="border-solid border-2 border-black h-11 pl-4 mt-16 w-96  rounded-lg  "
-            ></input>
+      <Navbarlogin />
+      <div className=" h-fixed">
+        <div className="flex flex-row justify-between overflow-y-hidden">
+          <div className="flex flex-col pl-44 mt-12">
+            <p className="mt-10  font-fredoka text-5xl text-peach">Sign Up</p>
+            <form className="flex flex-col">
+              <input
+                type={"text"}
+                placeholder="Name"
+                name="name"
+                onChange={(e) => setName(e.target.value)}
+                value={name}
+                className="border-solid border-2 border-black h-11 pl-4 mt-16 w-96  rounded-lg  "
+              ></input>
 
-            <input
-              type={"email"}
-              placeholder="Email"
-              name="email"
-              onChange={(e) => setEmail(e.target.value)}
-              className="border-solid border-2 border-black h-11 pl-4 mt-7   rounded-lg  "
-            ></input>
-            <input
-              type={"password"}
-              placeholder="Password"
-              name="password"
-              onChange={(e) => setPassword(e.target.value)}
-              className="border-solid border-2 border-black h-11 pl-4 mt-7  rounded-lg  "
-            ></input>
-            <button
-              type={"submit"}
-              onClick={signupUser}
-              disabled={!name || !email || !password}
-              className="border-solid border-2 font-fredoka text-2xl bg-red-500 text-white h-11 pl-4 mt-16   rounded-lg  "
-            >
-              Join
-            </button>
-          </form>
-          <div className="relative flex py-10 items-center">
-            <div className="flex-grow border-t border-gray-400"></div>
-            <span className="flex-shrink mx-4 text-gray-400">Or</span>
-            <div className="flex-grow border-t border-gray-400"></div>
+              <input
+                type={"email"}
+                placeholder="Email"
+                name="email"
+                onChange={(e) => setEmail(e.target.value)}
+                className="border-solid border-2 border-black h-11 pl-4 mt-7   rounded-lg  "
+              ></input>
+              <input
+                type={"password"}
+                placeholder="Password"
+                name="password"
+                onChange={(e) => setPassword(e.target.value)}
+                className="border-solid border-2 border-black h-11 pl-4 mt-7  rounded-lg  "
+              ></input>
+              <button
+                type={"submit"}
+                onClick={signupUser}
+                disabled={!name || !email || !password}
+                className="border-solid border-2 font-fredoka text-2xl bg-red-500 text-white h-11 pl-4 mt-16   rounded-lg  "
+              >
+                Join
+              </button>
+            </form>
+            <div className="relative flex py-10 items-center">
+              <div className="flex-grow border-t border-gray-400"></div>
+              <span className="flex-shrink mx-4 text-gray-400">Or</span>
+              <div className="flex-grow border-t border-gray-400"></div>
+            </div>
+            <div className="flex justify-center ">
+              <Link href="./login" className="text-lg">
+                Log In
+              </Link>
+            </div>
           </div>
-          <div className="flex justify-center ">
-            <Link href="./login" className="text-lg">
-              Log In
-            </Link>
+          <div className="bg-off-white w-3/5 pl-7 pt-2 ">
+            <Image src={signup} alt="sign in image" height={100} width={900} />
           </div>
-        </div>
-        <div className="bg-off-white w-3/5 pl-7 pt-2 ">
-          <Image src={signup} alt="sign in image" height={100} width={900} />
         </div>
       </div>
-    </div>
     </>
   );
 }

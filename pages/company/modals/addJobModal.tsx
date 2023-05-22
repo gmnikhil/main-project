@@ -115,7 +115,7 @@ export default function AddJobModal({
 
         <div className="mt-4 flex justify-end ">
           <Button
-            className="text-white bg-baseColor"
+            className="text-white bg-blue-400"
             disabled={
               !requirements ||
               !eligibility ||

@@ -54,6 +54,7 @@ function Job() {
   }, [acc]);
   return (
     <>
+      <Navbar />
       {currentCompany && (
         <AddJobModal
           handleClose={handleCloseJobAddModal}

@@ -9,6 +9,7 @@ import { Button, Paper, Text } from "@mantine/core";
 import Link from "next/link";
 import Image from "next/image";
 import Report from "../../../components/report";
+import Navbar from "../../../components/Navbar";
 
 export default function ReportsPage() {
   const [reports, setReports] = useState([]);
@@ -111,65 +112,68 @@ export default function ReportsPage() {
       </>
     );
   return (
-    <div className="bg-white flex flex-row h-screen">
-      <div className=" bg-white w-1/3 flex justify-center items-center flex-col overflow-hidden">
-        <Image
-          src={job.company.avatar}
-          height={80}
-          width={80}
-          alt="company logo"
-          className="w-20 h-20 rounded-full"
-        />
-        <div className="mt-5 flex flex-col items-center">
-          <p className="font-josefin text-3xl text-red-700 ">
-            {job.company.name}
-          </p>
-          <p className="font-josefin text-2xl mt-2">{job.company.email}</p>
-          {/* <p className="font-josefin text-lg mt-1">Uploaded 19 minutes ago</p> */}
+    <>
+      <Navbar />
+      <div className="bg-white flex flex-row h-screen">
+        <div className=" bg-white w-1/3 flex justify-center items-center flex-col overflow-hidden">
+          <Image
+            src={job.company.avatar}
+            height={80}
+            width={80}
+            alt="company logo"
+            className="w-20 h-20 rounded-full"
+          />
+          <div className="mt-5 flex flex-col items-center">
+            <p className="font-josefin text-3xl text-red-700 ">
+              {job.company.name}
+            </p>
+            <p className="font-josefin text-2xl mt-2">{job.company.email}</p>
+            {/* <p className="font-josefin text-lg mt-1">Uploaded 19 minutes ago</p> */}
 
-          {/* <Button variant="outline" color="blue" className="mt-7">
+            {/* <Button variant="outline" color="blue" className="mt-7">
       Follow
     </Button> */}
-          <Link href={"/jobs/details/" + jobID}>
-            <Button
-              variant="filled"
-              color="green"
-              className="mt-7 bg-green-400"
-            >
-              View Details
-            </Button>
-          </Link>
+            <Link href={"/jobs/details/" + jobID}>
+              <Button
+                variant="filled"
+                color="green"
+                className="mt-7 bg-green-400"
+              >
+                View Details
+              </Button>
+            </Link>
+          </div>
         </div>
-      </div>
-      <div className=" pl-10 w-2/3 pr-20 bg-beige pb-5 overflow-y-scroll">
-        <div className="flex flex-row ">
-          <p className="font-gloock text-3xl font-bold mt-10 text-red-700 mr-16">
-            {job.title}
-          </p>
-        </div>
-        {reports &&
-          reports.map((report: any, i) => {
-            return <Report key={i} report={report} />;
-          })}
-        {jobID && (
-          <AddReportModal
-            jobID={jobID}
-            handleClose={closeReportModal}
-            open={report_modal_opened}
-            handleUpdate={fetchReports}
-          />
-        )}
-        <div className={"w-full flex justify-center"}>
+        <div className=" pl-10 w-2/3 pr-20 bg-beige pb-5 overflow-y-scroll">
+          <div className="flex flex-row ">
+            <p className="font-gloock text-3xl font-bold mt-10 text-red-700 mr-16">
+              {job.title}
+            </p>
+          </div>
+          {reports &&
+            reports.map((report: any, i) => {
+              return <Report key={i} report={report} />;
+            })}
           {jobID && (
-            <Button
-              className="bg-blue-400"
-              onClick={() => setReportModalOpened(true)}
-            >
-              Add Report
-            </Button>
+            <AddReportModal
+              jobID={jobID}
+              handleClose={closeReportModal}
+              open={report_modal_opened}
+              handleUpdate={fetchReports}
+            />
           )}
+          <div className={"w-full flex justify-center"}>
+            {jobID && (
+              <Button
+                className="bg-blue-400"
+                onClick={() => setReportModalOpened(true)}
+              >
+                Add Report
+              </Button>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
