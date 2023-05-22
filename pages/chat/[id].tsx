@@ -42,6 +42,7 @@ const MessagesPage = () => {
     });
 
     newSocket.on("message", (newMessage: String) => {
+      console.log(newMessage);
       setMessages((prevMessages) => [...prevMessages, newMessage]);
     });
 
@@ -49,14 +50,16 @@ const MessagesPage = () => {
   }
 
   const handleSendMessage = () => {
-    if (!message || !currentUser) {
+    if (!message) {
       if (!currentUser) console.log(currentUser);
       return;
     }
 
+    let user = currentUser ? currentUser : currentCompany;
+
     const newMessage = {
       content: message,
-      sender: currentUser._id,
+      sender: user._id,
       recipient,
     };
 
@@ -207,73 +210,76 @@ const MessagesPage = () => {
     );
 
   return (
-    <div className="flex flex-col bg-beige items-center pt-10 h-screen">
-      <div className="bg-white w-5/6 mb-10 h-5/6 overflow-y-scroll">
-        <div className="bg-off-white h-16 flex items-center mb-5">
-          <div
-            className="bg-cover bg-center bg-black rounded-3xl w-10 h-10 ml-5"
-            style={{
-              backgroundImage: `url(${
-                recipientData?.avatar
-                  ? recipientData.avatar
-                  : "../../public/images/profile.jpg"
-              })`,
-            }}
-          ></div>
-          <Link
-            href={`/profile/${recipientData?._id ? recipientData._id : ""}`}
-          >
-            <p className="ml-3 font-josefin">
-              {recipientData?.name || "Loading..."}
-            </p>
-          </Link>
-        </div>
-        <div className="flex flex-col">
-          <div className="pb-10">
-            <ul>
-              {messages &&
-                messages.map((msg, i) => {
-                  if (
-                    msg.from == currentUser?._id ||
-                    msg.from == currentCompany?._id
-                  )
+    <>
+      <Navbar />
+      <div className="flex flex-col bg-beige items-center pt-10 h-screen">
+        <div className="bg-white w-5/6 mb-10 h-5/6 overflow-y-scroll">
+          <div className="bg-off-white h-16 flex items-center mb-5">
+            <div
+              className="bg-cover bg-center bg-black rounded-3xl w-10 h-10 ml-5"
+              style={{
+                backgroundImage: `url(${
+                  recipientData?.avatar
+                    ? recipientData.avatar
+                    : "../../public/images/profile.jpg"
+                })`,
+              }}
+            ></div>
+            <Link
+              href={`/profile/${recipientData?._id ? recipientData._id : ""}`}
+            >
+              <p className="ml-3 font-josefin">
+                {recipientData?.name || "Loading..."}
+              </p>
+            </Link>
+          </div>
+          <div className="flex flex-col">
+            <div className="pb-10">
+              <ul>
+                {messages &&
+                  messages.map((msg, i) => {
+                    if (
+                      msg.from == currentUser?._id ||
+                      msg.from == currentCompany?._id
+                    )
+                      return (
+                        <div className="flex justify-end mb-5">
+                          <li
+                            key={i}
+                            className=" mr-5 bg-peach max-w-xs rounded-lg p-2"
+                          >
+                            {/* {currentUser.name}:*/} {msg.body}
+                          </li>
+                          <br />
+                        </div>
+                      );
                     return (
-                      <div className="flex justify-end mb-5">
+                      <div className="flex justify-start mb-5">
                         <li
                           key={i}
-                          className=" mr-5 bg-peach max-w-xs rounded-lg p-2"
+                          className="bg-light-pink max-w-xs  rounded-lg p-2 ml-5"
                         >
-                          {/* {currentUser.name}:*/} {msg.body}
+                          {/* {recipientData.name}:*/} {msg.body}
                         </li>
                         <br />
                       </div>
                     );
-                  return (
-                    <div className="flex justify-start mb-5">
-                      <li
-                        key={i}
-                        className="bg-light-pink max-w-xs  rounded-lg p-2 ml-5"
-                      >
-                        {/* {recipientData.name}:*/} {msg.body}
-                      </li>
-                      <br />
-                    </div>
-                  );
-                })}
-            </ul>
+                  })}
+              </ul>
+            </div>
           </div>
         </div>
+        <div className=" h-14 w-5/6 -mt-16 items-center bg-off-white ">
+          <InputEmoji
+            value={message}
+            onChange={setMessage}
+            cleanOnEnter
+            placeholder="Type a message"
+            onEnter={handleSendMessage}
+          />
+        </div>
       </div>
-      <div className=" h-14 w-5/6 -mt-16 items-center bg-off-white ">
-        <InputEmoji
-          value={message}
-          onChange={setMessage}
-          cleanOnEnter
-          placeholder="Type a message"
-          onEnter={handleSendMessage}
-        />
-      </div>
-    </div>
+    </>
   );
 };
 

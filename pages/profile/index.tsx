@@ -321,20 +321,21 @@ function Profile() {
         update(res.data.user);
       })
       .catch((err: any) => console.log(err));
-
-    requestHandler(
-      "GET",
-      "/api/mentorship?mentor=" + currentUser._id,
-      {},
-      token
-    )
-      .then((res: any) => {
-        if (res.data.requests.length) setMentorship(res.data.requests[0]);
-      })
-      .catch((e: any) => {
-        console.log(e);
-        toast.error("Something went wrong!");
-      });
+    if (currentUser) {
+      requestHandler(
+        "GET",
+        "/api/mentorship?mentor=" + currentUser._id,
+        {},
+        token
+      )
+        .then((res: any) => {
+          if (res.data.requests.length) setMentorship(res.data.requests[0]);
+        })
+        .catch((e: any) => {
+          console.log(e);
+          toast.error("Something went wrong!");
+        });
+    }
   };
 
   useEffect(() => {

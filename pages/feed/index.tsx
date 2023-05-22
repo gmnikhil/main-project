@@ -241,7 +241,9 @@ export function SidebarSearch() {
           </Title>
         </Sidebar.Section>
         <Sidebar.Section className="flex justify-center -mt-1 text-sm mb-5 text-red-600">
-          <Link href="/profile">View Profile</Link>
+          <Link href={currentUser ? "/profile" : "/company/profile"}>
+            View Profile
+          </Link>
         </Sidebar.Section>
         <Divider className="mb-10" />
 

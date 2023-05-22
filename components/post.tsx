@@ -100,7 +100,9 @@ function Post({ post }: { post: any }) {
               <p>{this_post.creator.name}</p>
             </Link>
             <p className="text-xs text-gray-400 font-normal">
-              {this_post.creator.username}
+              {this_post.creator?.username
+                ? this_post.creator?.username
+                : this_post.creator.email}
             </p>
           </div>
 
