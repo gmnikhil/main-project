@@ -28,10 +28,13 @@ const MessagesPage = () => {
     await fetch("/api/chat/room", {
       headers: { Authorization: `Bearer ${token}` },
     });
+    let rid;
+    if (currentUser) rid = currentUser._id;
+    else rid = currentCompany._id;
     const newSocket = io({
       extraHeaders: { Authorization: `Bearer ${token}` },
       query: {
-        room: [currentUser._id, recipient].sort().join(""),
+        room: [rid, recipient].sort().join(""),
       },
     });
     newSocket.on("connect", () => {
@@ -150,10 +153,11 @@ const MessagesPage = () => {
   }, [router]);
 
   useEffect(() => {
-    if (currentUser && recipient) {
+    if ((currentUser && recipient) || (currentCompany && recipient)) {
       initSocket();
       getRecepientAndMessages();
-      checkMentorship();
+      if (!currentCompany) checkMentorship();
+      if (currentCompany) setLoading(false);
     }
     return () => {
       if (socket) {
@@ -216,7 +220,9 @@ const MessagesPage = () => {
               })`,
             }}
           ></div>
-          <Link href={"/profile/" + recipientData._id}>
+          <Link
+            href={`/profile/${recipientData?._id ? recipientData._id : ""}`}
+          >
             <p className="ml-3 font-josefin">
               {recipientData?.username || "Loading..."}
             </p>

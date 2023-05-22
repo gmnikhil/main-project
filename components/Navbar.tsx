@@ -13,7 +13,9 @@ function Navbar({ className }: { className?: string }) {
     useContext(AuthContext);
 
   useEffect(() => {
-    if (!currentUser && !currentCompany) router.push("/auth/login");
+    if (!currentUser && !currentCompany) {
+      router.push("/auth/login");
+    }
   }, [currentUser]);
 
   const logout = () => {

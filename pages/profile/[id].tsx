@@ -97,10 +97,9 @@ function PublicProfile() {
   const getFollowing = async () => {
     requestHandler(
       "GET",
-      "/api/feed/follow?entity=" +
-        router.query.id +
-        "&&follower=" +
-        currentUser._id,
+      `/api/feed/follow?entity=${router.query.id}&&follower=${
+        currentUser ? currentUser._id : currentCompany._id
+      }`,
       {},
       token
     )
@@ -186,7 +185,7 @@ function PublicProfile() {
                 <p className="text-lg">{username}</p>
                 <p className="text-gray-500 text-sm">{email}</p>
               </div>
-              <div>
+              <div className="flex gap-4">
                 {mentorship?.status === "progress" && (
                   <Badge color="grape" variant="filled">
                     Mentoring
@@ -226,10 +225,7 @@ function PublicProfile() {
               About
             </Title>
 
-            <p className="">
-              {about ||
-                `--Add ABout--`}
-            </p>
+            <p className="">{about || `--Add ABout--`}</p>
           </div>
         </div>
         <div className="bg-white mt-10 rounded-lg mx-72 pb-6  -mb-5">
@@ -238,10 +234,7 @@ function PublicProfile() {
               Career
             </Title>
 
-            <p className="">
-              {work_profile ||
-                `--Add Career Details--`}
-            </p>
+            <p className="">{work_profile || `--Add Career Details--`}</p>
           </div>
         </div>
         <div className="bg-white mt-10 rounded-lg mx-72 pb-6  -mb-5">
@@ -250,10 +243,7 @@ function PublicProfile() {
               Honours
             </Title>
 
-            <p className="">
-              {honours ||
-                `--Add Honours--`}
-            </p>
+            <p className="">{honours || `--Add Honours--`}</p>
           </div>
         </div>
         <div className="bg-white mt-10 rounded-lg mx-72 pb-6  -mb-5">
@@ -262,10 +252,7 @@ function PublicProfile() {
               Education
             </Title>
 
-            <p className="">
-              {education ||
-                `--Add Education Details--`}
-            </p>
+            <p className="">{education || `--Add Education Details--`}</p>
           </div>
         </div>
         <div className="bg-white mt-10 rounded-lg mx-72 pb-6  -mb-5">
@@ -274,10 +261,7 @@ function PublicProfile() {
               Projects
             </Title>
 
-            <p className="">
-              {projects ||
-                `--Add Projects--`}
-            </p>
+            <p className="">{projects || `--Add Projects--`}</p>
           </div>
         </div>
         <div className="bg-white mt-10 rounded-lg mx-72 pb-6 -mb-5">
@@ -287,9 +271,7 @@ function PublicProfile() {
             </Title>
 
             <p className="">
-              {skills?.length > 0
-                ? skills.join(", ")
-                : `--Add Your Skills--`}
+              {skills?.length > 0 ? skills.join(", ") : `--Add Your Skills--`}
             </p>
           </div>
         </div>
