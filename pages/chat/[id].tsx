@@ -181,7 +181,7 @@ const MessagesPage = () => {
     const currentTime = new Date();
     console.log(currentTime - targetTime);
     // Check if current time is less than half past the target time
-    if (currentTime - targetTime < 1800 && currentTime - targetTime >= 0) {
+    if (currentTime - targetTime < 1800000 && currentTime - targetTime >= 0) {
       console.log(currentTime - targetTime);
       setShowChat(true);
       return;
@@ -224,7 +224,7 @@ const MessagesPage = () => {
             href={`/profile/${recipientData?._id ? recipientData._id : ""}`}
           >
             <p className="ml-3 font-josefin">
-              {recipientData?.username || "Loading..."}
+              {recipientData?.name || "Loading..."}
             </p>
           </Link>
         </div>

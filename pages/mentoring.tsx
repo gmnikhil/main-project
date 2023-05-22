@@ -4,7 +4,8 @@ import requestHandler from "../utils/requestHandler";
 import { AuthContext } from "../context/authContext";
 import Navbar from "../components/Navbar";
 import MentorRequests from "../components/mentorRequests";
-import { Countdown, Paper, Text } from "@mantine/core";
+import { Paper, Text } from "@mantine/core";
+import Link from "next/link";
 
 function Job() {
   const [requests, setRequests] = useState<any>([]);
@@ -92,15 +93,17 @@ function Job() {
     targetTime.setMilliseconds(0);
 
     const currentTime = new Date();
+    console.log("hi");
+    console.log(currentTime - targetTime);
 
     // Check if current time is less than half past the target time
-    if (currentTime - targetTime < 1800 && currentTime - targetTime >= 0) {
+    if (currentTime - targetTime < 1800000 && currentTime - targetTime >= 0) {
       console.log(currentTime - targetTime);
       setShowChat(true);
       return;
     }
 
-    if (currentTime - targetTime < 1800) {
+    if (currentTime - targetTime < 1800000) {
       const remainingTime = new Date();
       remainingTime.setHours(hours);
       remainingTime.setMinutes(minutes);
@@ -185,9 +188,18 @@ function Job() {
         <div className="h-full w-full mt-52 flex justify-center items-center">
           {/* Render a beautiful UI showing the remaining time */}
           <Paper shadow="xs" style={{ textAlign: "center" }}>
-            <Link href={"/chat/" + mentor.mentor._id}>
+            <Link
+              href={`/chat/${
+                currentUser?._id == mentor.mentor._id
+                  ? mentor.mentee._id
+                  : mentor.mentor._id
+              }`}
+            >
               <Text size="md" weight={700} style={{ marginBottom: "10px" }}>
-                Go to Mentor Chat: {mentor.mentor.name}
+                Go to Chat:{" "}
+                {currentUser?._id == mentor.mentor._id
+                  ? mentor.mentee.name
+                  : mentor.mentor.name}
               </Text>
             </Link>
           </Paper>
