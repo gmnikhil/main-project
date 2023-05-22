@@ -14,6 +14,9 @@ function signUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmpassword] = useState("");
+  const [isValidEmail, setIsValidEmail] = useState(true);
+
 
   const [nameErr, setNameErr] = useState("");
   const [usernameErr, setUserNameErr] = useState("");
@@ -39,6 +42,24 @@ function signUp() {
         handleUsername(user.username);
       })
       .catch((err: any) => console.log(err));
+
+     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+     const isValid = emailPattern.test(email);
+     setIsValidEmail(isValid);
+     if (isValidEmail) {
+      // Proceed with submission
+      console.log('Email is valid!');
+    } else {
+      // Email is not valid
+      alert('Invalid Email Format!');
+    }
+      if (password === confirmpassword) {
+        // Passwords match, proceed with form submission or other actions
+        console.log('Passwords match!');
+      } else {
+        // Passwords do not match
+        alert("Passwords Do Not Match!")
+      }
   }
 
   useEffect(() => {
@@ -78,12 +99,20 @@ function signUp() {
               name="email"
               onChange={(e) => setEmail(e.target.value)}
               className="border-solid border-2 border-black h-11 pl-4 mt-7   rounded-lg  "
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
             ></input>
             <input
               type={"password"}
               placeholder="Password"
               name="password"
               onChange={(e) => setPassword(e.target.value)}
+              className="border-solid border-2 border-black h-11 pl-4 mt-7  rounded-lg  "
+            ></input>
+             <input
+              type={"password"}
+              placeholder="Confirm Password"
+              name="password"
+              onChange={(e) => setConfirmpassword(e.target.value)}
               className="border-solid border-2 border-black h-11 pl-4 mt-7  rounded-lg  "
             ></input>
             <button

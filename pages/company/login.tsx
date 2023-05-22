@@ -39,7 +39,10 @@ function SignIn() {
         handleCompanyName(company.name);
         if (res.data.success) router.push("/company/profile");
       })
-      .catch((err: any) => console.log(err));
+      .catch((err: any) => {
+        console.log(err)
+        alert("Incorrect Email or Password");
+      });
   }
 
   useEffect(() => {

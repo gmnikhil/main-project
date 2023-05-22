@@ -323,13 +323,7 @@ export default function CompanyProfile() {
 
             <p className="">
               {about ||
-                `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-            posuere sapien quis ante ultrices tempus. Ut et ante mauris. Proin
-            tincidunt finibus metus. Aliquam erat volutpat. Donec est odio,
-            suscipit id molestie vitae, ultricies eu nunc. Etiam turpis erat,
-            scelerisque vel ornare vel, bibendum a nisl. Duis sit amet dolor
-            nisl. Pellentesque vitae erat aliquam, elementum enim sed, dignissim
-            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.`}
+                `--Add About--`}
             </p>
           </div>
         </div>
@@ -341,13 +335,7 @@ export default function CompanyProfile() {
 
             <p className="">
               {work ||
-                `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-            posuere sapien quis ante ultrices tempus. Ut et ante mauris. Proin
-            tincidunt finibus metus. Aliquam erat volutpat. Donec est odio,
-            suscipit id molestie vitae, ultricies eu nunc. Etiam turpis erat,
-            scelerisque vel ornare vel, bibendum a nisl. Duis sit amet dolor
-            nisl. Pellentesque vitae erat aliquam, elementum enim sed, dignissim
-            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.`}
+                `--Add Work Details--`}
             </p>
           </div>
         </div>
@@ -359,13 +347,7 @@ export default function CompanyProfile() {
 
             <p className="">
               {environment ||
-                `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-            posuere sapien quis ante ultrices tempus. Ut et ante mauris. Proin
-            tincidunt finibus metus. Aliquam erat volutpat. Donec est odio,
-            suscipit id molestie vitae, ultricies eu nunc. Etiam turpis erat,
-            scelerisque vel ornare vel, bibendum a nisl. Duis sit amet dolor
-            nisl. Pellentesque vitae erat aliquam, elementum enim sed, dignissim
-            elit. Praesent ante sem, tempor eu velit et, ornare euismod eros.`}
+                `--Add Environment Details--`}
             </p>
           </div>
         </div>
