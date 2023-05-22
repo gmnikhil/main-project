@@ -140,19 +140,20 @@ function Job() {
     checkMentee();
   }, [currentUser]);
 
-  if (mentor && !showChat && !mentor?.mentee) {
-    <>
-      <Navbar />
-      <div className="h-full w-full mt-52 flex justify-center items-center">
-        {/* Render a beautiful UI showing the remaining time */}
-        <Paper shadow="xs" style={{ textAlign: "center" }}>
-          <Text size="md" weight={700} style={{ marginBottom: "10px" }}>
-            No mentee has been assigned. Keep waiting!
-          </Text>
-        </Paper>
-      </div>
-    </>;
-  }
+  if (mentor && !showChat && !mentor?.mentee)
+    return (
+      <>
+        <Navbar />
+        <div className="h-full w-full mt-52 flex justify-center items-center">
+          {/* Render a beautiful UI showing the remaining time */}
+          <Paper shadow="xs" style={{ textAlign: "center" }}>
+            <Text size="md" weight={700} style={{ marginBottom: "10px" }}>
+              No mentee has been assigned. Keep waiting!
+            </Text>
+          </Paper>
+        </div>
+      </>
+    );
 
   if (mentor && !showChat)
     return (

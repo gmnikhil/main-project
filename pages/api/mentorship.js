@@ -41,8 +41,8 @@ export default async function handler(req, res) {
     case "POST":
       try {
         const x = await verifyToken(req);
-        await Mentorship.create(req.body);
-        res.status(201).json({ success: true });
+        const m = await Mentorship.create(req.body);
+        res.status(201).json({ success: true, request: m });
       } catch (error) {
         console.log(error);
         res.status(400).json({ success: false });

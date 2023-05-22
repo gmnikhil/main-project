@@ -287,7 +287,8 @@ function Profile() {
         token
       )
         .then((res: any) => {
-          setMentorship(res.data.requests[0]);
+          console.log(res);
+          setMentorship({ ...res.data.request });
           handlers5.close();
         })
         .catch((e: any) => {
@@ -302,7 +303,8 @@ function Profile() {
         token
       )
         .then((res: any) => {
-          setMentorship(res.data.requests[0]);
+          console.log(res);
+          setMentorship(undefined);
           handlers5.close();
         })
         .catch((e: any) => {
@@ -749,10 +751,7 @@ function Profile() {
               About
             </Title>
 
-            <p className="">
-              {about ||
-                `--Add About--`}
-            </p>
+            <p className="">{about || `--Add About--`}</p>
           </div>
         </div>
         <div className="bg-white mt-10 rounded-lg mx-72 pb-6  -mb-5">
@@ -761,10 +760,7 @@ function Profile() {
               Career
             </Title>
 
-            <p className="">
-              {work_profile ||
-                `--Add Career Details--`}
-            </p>
+            <p className="">{work_profile || `--Add Career Details--`}</p>
           </div>
         </div>
         <div className="bg-white mt-10 rounded-lg mx-72 pb-6  -mb-5">
@@ -773,10 +769,7 @@ function Profile() {
               Honours
             </Title>
 
-            <p className="">
-              {honours ||
-                `--Add Honours--`}
-            </p>
+            <p className="">{honours || `--Add Honours--`}</p>
           </div>
         </div>
         <div className="bg-white mt-10 rounded-lg mx-72 pb-6  -mb-5">
@@ -785,10 +778,7 @@ function Profile() {
               Education
             </Title>
 
-            <p className="">
-              {education ||
-                `--Add Education Details--`}
-            </p>
+            <p className="">{education || `--Add Education Details--`}</p>
           </div>
         </div>
         <div className="bg-white mt-10 rounded-lg mx-72 pb-6  -mb-5">
@@ -797,10 +787,7 @@ function Profile() {
               Projects
             </Title>
 
-            <p className="">
-              {projects ||
-                `--Add Your Projects--`}
-            </p>
+            <p className="">{projects || `--Add Your Projects--`}</p>
           </div>
         </div>
         <div className="bg-white mt-10 rounded-lg mx-72 pb-6 -mb-5">
@@ -810,9 +797,7 @@ function Profile() {
             </Title>
 
             <p className="">
-              {skills?.length > 0
-                ? skills.join(", ")
-                : `--Add Your Skills--`}
+              {skills?.length > 0 ? skills.join(", ") : `--Add Your Skills--`}
             </p>
           </div>
         </div>

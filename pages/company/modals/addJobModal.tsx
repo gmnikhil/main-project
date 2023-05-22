@@ -30,7 +30,7 @@ export default function AddJobModal({
       if (!currentCompany) {
         throw new Error("No company");
       }
-      const r = await (MainProjectContract as any).methods
+      await (MainProjectContract as any).methods
         .addJob(
           currentCompany._id,
           title,

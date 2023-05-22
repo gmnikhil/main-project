@@ -4,10 +4,8 @@ import { useWalletDetails } from "../../../hooks/walletDetails";
 import { AuthContext } from "../../../context/authContext";
 import requestHandler from "../../../utils/requestHandler";
 import { toast } from "react-toastify";
-import InputEmoji from "react-input-emoji";
-import { Button } from "@mantine/core";
-import { DragAndDrop } from "../../../components";
-import { storeFile } from "../../../utils/storeFile";
+import AddReportModal from "./modals/addReportModal";
+import { Button, Paper, Text } from "@mantine/core";
 
 export default function ReportsPage() {
   const [reports, setReports] = useState([]);
@@ -19,51 +17,10 @@ export default function ReportsPage() {
   const [new_report, setNewReport] = useState();
   const [file, setFile] = useState();
 
-  const handleFile = (file: any) => {
-    setFile(file);
-  };
+  const [report_modal_opened, setReportModalOpened] = useState(false);
 
-  const handleNewReport = async () => {
-    let file_link = "";
-    const created_on = new Date().toISOString();
-    let creator_id, creatorType;
-    if (currentUser) {
-      creator_id = currentUser._id;
-      creatorType = "user";
-    } else {
-      creator_id = currentCompany._id;
-      creatorType = "company";
-    }
-
-    try {
-      if (file) {
-        const res = await storeFile(file, "report_file", "report");
-
-        if (!res.data) throw Error(`Could'nt upload file`);
-
-        file_link =
-          `https://ipfs.io/` +
-          res.data.data.image.href.replace(":", "").replace("//", "/");
-      }
-
-      await (MainProjectContract as any).methods
-        .addReport(
-          new_report,
-          file_link,
-          created_on,
-          creator_id,
-          creatorType,
-          jobID
-        )
-        .send({ from: acc });
-
-      setFile(undefined);
-
-      fetchReports();
-    } catch (e) {
-      console.log(e);
-      toast.error("Something went wrong");
-    }
+  const closeReportModal = () => {
+    setReportModalOpened(false);
   };
 
   async function fetchJob() {
@@ -155,10 +112,23 @@ export default function ReportsPage() {
     <div className="bg-beige h-screen flex justify-center pt-10">
       <div className="bg-white w-5/6 mb-10">
         <div className="bg-off-white h-16 flex items-center ">
-          <div className="bg-black rounded-3xl w-10 h-10 ml-5"></div>
+          <div
+            className="bg-black rounded-3xl w-10 h-10 ml-5"
+            style={{
+              backgroundImage: `url(${
+                job?.company?.avatar
+                  ? job.company.avatar
+                  : "../../public/images/profile.png"
+              })`,
+            }}
+          ></div>
           <p className="ml-3 font-josefin">{job.title || "Loading..."}</p>
         </div>
-        <h1>Messages</h1>
+        <Paper className="flex w-full justify-center my-6">
+          <Text weight={700} size={"lg"}>
+            Reports
+          </Text>
+        </Paper>
         <div>
           <ul>
             {reports &&
@@ -175,33 +145,23 @@ export default function ReportsPage() {
           </ul>
         </div>
 
-        <div className="w-full mx-auto my-5">
-          {file ? (
-            <div className="relative">
-              <img
-                className="mx-auto"
-                src={URL.createObjectURL(file)}
-                style={{ maxHeight: "100px" }}
-              />
-              <Button
-                className="text-white bg-red-600 absolute right-0"
-                onClick={() => setFile(undefined)}
-              >
-                Delete
-              </Button>
-            </div>
-          ) : (
-            <DragAndDrop handleFile={handleFile} />
-          )}
-        </div>
-        <div className="absolute bottom-10 w-5/6 h-14 flex flex-row items-center bg-off-white overflow-hidden">
-          <InputEmoji
-            value={new_report}
-            onChange={setNewReport}
-            cleanOnEnter
-            placeholder="Type your report"
-            onEnter={handleNewReport}
+        {jobID && (
+          <AddReportModal
+            jobID={jobID}
+            handleClose={closeReportModal}
+            open={report_modal_opened}
+            handleUpdate={fetchReports}
           />
+        )}
+        <div className={"w-full flex justify-center"}>
+          {jobID && (
+            <Button
+              className="bg-blue-400"
+              onClick={() => setReportModalOpened(true)}
+            >
+              Add Report
+            </Button>
+          )}
         </div>
       </div>
     </div>
