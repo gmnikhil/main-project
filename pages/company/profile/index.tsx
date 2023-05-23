@@ -228,7 +228,7 @@ export default function CompanyProfile() {
           </Button>
         </div>
       </Modal>
-      <div className="flex bg-beige w-full justify-center flex-col ">
+      <div className="flex bg-beige w-full justify-center flex-col pb-10">
         <div className=" bg-white mt-10 rounded-lg mx-72 pb-6 -mb-5">
           <div
             className={`w-full relative bg-cover h-1/2 pt-48 pb-5`}
